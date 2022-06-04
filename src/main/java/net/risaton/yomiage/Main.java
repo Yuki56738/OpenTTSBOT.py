@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioReference;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
@@ -30,7 +31,45 @@ import java.nio.file.Paths;
 public class Main {
     public static String TOKEN;
 
-    public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
+    public static AudioConnection audioConnectionGlobal;
+
+    public static void playAudio(DiscordApi api){
+        AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+        playerManager.registerSourceManager(new LocalAudioSourceManager());
+        AudioPlayer player = playerManager.createPlayer();
+
+
+        AudioSource source = new LavaplayerAudioSource(api, player);
+        audioConnectionGlobal.setAudioSource(source);
+//        playAudio(playerManager, player);
+
+
+        playerManager.loadItem("test.wav", new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack audioTrack) {
+                player.playTrack(audioTrack);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+                for (AudioTrack track : audioPlaylist.getTracks()) {
+                    player.playTrack(track);
+                }
+            }
+
+            @Override
+            public void noMatches() {
+
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+
+            }
+        });
+    }
+
+    public static void main(String[] args) {
         Path file = Paths.get("token.txt");
         try {
             TOKEN = Files.readString(file);
@@ -47,7 +86,10 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()){
                 return;
             }
+
             System.out.println(event.getMessageContent());
+
+            playAudio(api);
             if (event.getMessageContent().contains("yuki") && !event.getMessageAuthor().isBotUser()) {
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
@@ -73,36 +115,16 @@ public class Main {
                 ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
                 serverVoiceChannel.connect().thenAccept(audioConnection -> {
                     //Do stuff
-                    AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-                    playerManager.registerSourceManager(new LocalAudioSourceManager());
-                    AudioPlayer player = playerManager.createPlayer();
-
-
-                    AudioSource source = new LavaplayerAudioSource(api, player);
-                    audioConnection.setAudioSource(source);
-                    playerManager.loadItem("test.wav", new AudioLoadResultHandler() {
-                        @Override
-                        public void trackLoaded(AudioTrack audioTrack) {
-                            player.playTrack(audioTrack);
-                        }
-
-                        @Override
-                        public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                            for (AudioTrack track : audioPlaylist.getTracks()) {
-                                player.playTrack(track);
-                            }
-                        }
-
-                        @Override
-                        public void noMatches() {
-
-                        }
-
-                        @Override
-                        public void loadFailed(FriendlyException e) {
-
-                        }
-                    });
+//                    AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+//                    playerManager.registerSourceManager(new LocalAudioSourceManager());
+//                    AudioPlayer player = playerManager.createPlayer();
+//
+//
+//                    AudioSource source = new LavaplayerAudioSource(api, player);
+//                    audioConnection.setAudioSource(source);
+//                    playAudio(playerManager, player);
+                audioConnectionGlobal = audioConnection;
+                playAudio(api);
 
                     channel.sendMessage("Connected.");
                 }).exceptionally(throwable -> {

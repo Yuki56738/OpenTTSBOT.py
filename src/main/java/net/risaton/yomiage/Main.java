@@ -29,18 +29,8 @@ import java.nio.file.Paths;
 
 public class Main {
     public static String TOKEN;
+
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-//        System.out.println("Hello world!");
-//        File tokenfile = new File("token.txt");
-//        try {
-//            FileReader fileReader = new FileReader(tokenfile);
-//            int f = fileReader.read();
-//            System.out.println(f);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
         Path file = Paths.get("token.txt");
         try {
             TOKEN = Files.readString(file);
@@ -54,7 +44,11 @@ public class Main {
         System.out.println("discord bot built.");
         api.addMessageCreateListener(event -> {
             System.out.println("Message received.");
-            if (event.getMessageContent().contains("yuki") && ! event.getMessageAuthor().isBotUser()){
+            if (event.getMessageAuthor().isBotUser()){
+                return;
+            }
+            System.out.println(event.getMessageContent());
+            if (event.getMessageContent().contains("yuki") && !event.getMessageAuthor().isBotUser()) {
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
                 System.out.println("Sent こんにちは.");
@@ -94,7 +88,7 @@ public class Main {
 
                         @Override
                         public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                            for (AudioTrack track : audioPlaylist.getTracks()){
+                            for (AudioTrack track : audioPlaylist.getTracks()) {
                                 player.playTrack(track);
                             }
                         }
@@ -117,20 +111,12 @@ public class Main {
                 });
                 slashcommandInteraction.createImmediateResponder()
                         .setContent("Connecting...").respond();
-            }
-            else if (slashcommandInteraction.getCommandName().equals("leave")){
+            } else if (slashcommandInteraction.getCommandName().equals("leave")) {
                 slashcommandInteraction.createImmediateResponder()
                         .setContent("Disconnecting...").respond();
                 ServerVoiceChannel serverVoiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
                 serverVoiceChannel.disconnect().join();
             }
         });
-//        SlashCommand commandLeave = SlashCommand.with("leave", "leave from voice channel.").createForServer(server).join();
-//        api.addSlashCommandCreateListener(event -> {
-//            SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
-//            slashCommandInteraction.createImmediateResponder()
-//                    .setContent("Disconnecting...").respond();
-//        });
-
     }
 }

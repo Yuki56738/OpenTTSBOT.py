@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3c9f37d0-34cb-46f3-8421-93e77fdad0e2" name="変更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/risaton/yomiage/.Main.java.swp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/risaton/yomiage/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/risaton/yomiage/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,8 +53,16 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;
   }
 }</component>
-  <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="アプリケーション.Main">
+    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="net.risaton.yomiage.Main" />
+      <module name="yuki-s-yomiage-bot-java" />
+      <target name="ubuntu@primary.local:22" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="net.risaton.yomiage.Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="net.risaton.yomiage.Main" />
       <module name="yuki-s-yomiage-bot-java" />
       <extension name="coverage">
@@ -68,9 +75,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="アプリケーション.Main" />
+      <item itemvalue="アプリケーション.net.risaton.yomiage.Main" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="アプリケーション.Main" />
+        <item itemvalue="アプリケーション.net.risaton.yomiage.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -86,7 +97,7 @@
       <workItem from="1654335691388" duration="92000" />
       <workItem from="1654335815343" duration="219000" />
       <workItem from="1654340419258" duration="11301000" />
-      <workItem from="1654365078079" duration="111000" />
+      <workItem from="1654365078079" duration="5275000" />
     </task>
     <servers />
   </component>
@@ -103,17 +114,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/risaton/yomiage/Main.java</url>
-          <line>106</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

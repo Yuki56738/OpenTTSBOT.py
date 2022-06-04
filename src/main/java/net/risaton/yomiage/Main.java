@@ -32,6 +32,7 @@ public class Main {
     public static String TOKEN;
 
     public static AudioConnection audioConnectionGlobal;
+    public static ServerVoiceChannel serverVoiceChannelGlobal;
 
     public static void playAudio(DiscordApi api){
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
@@ -81,6 +82,7 @@ public class Main {
 
         DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
         System.out.println("discord bot built.");
+
         api.addMessageCreateListener(event -> {
             System.out.println("Message received.");
             if (event.getMessageAuthor().isBotUser()){
@@ -89,8 +91,12 @@ public class Main {
 
             System.out.println(event.getMessageContent());
 
+
+//            VoiceChannel voiceChannel = event.getMessageAuthor().getConnectedVoiceChannel().get();
+//            ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
+
             playAudio(api);
-            if (event.getMessageContent().contains("yuki") && !event.getMessageAuthor().isBotUser()) {
+            if (event.getMessageContent().equals(".yuki")){
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
                 System.out.println("Sent こんにちは.");
@@ -104,6 +110,7 @@ public class Main {
         Server server = api.getServerById("813401986299854859").get();
 
         SlashCommand command = SlashCommand.with("join", "connect to voice channel").createForServer(server).join();
+
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
             if (slashcommandInteraction.getCommandName().equals("join")) {
@@ -111,9 +118,10 @@ public class Main {
 
                 TextChannel channel = slashcommandInteraction.getChannel().get();
 //            channel.sendMessage("Connecting to channel...").join();
-                VoiceChannel voiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
-                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
-                serverVoiceChannel.connect().thenAccept(audioConnection -> {
+//                VoiceChannel voiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
+//                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
+                serverVoiceChannelGlobal = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
+                serverVoiceChannelGlobal.connect().thenAccept(audioConnection -> {
                     //Do stuff
 //                    AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 //                    playerManager.registerSourceManager(new LocalAudioSourceManager());
@@ -123,7 +131,8 @@ public class Main {
 //                    AudioSource source = new LavaplayerAudioSource(api, player);
 //                    audioConnection.setAudioSource(source);
 //                    playAudio(playerManager, player);
-                audioConnectionGlobal = audioConnection;
+//                audioConnection = audioConnection;
+                    audioConnectionGlobal = audioConnection;
                 playAudio(api);
 
                     channel.sendMessage("Connected.");

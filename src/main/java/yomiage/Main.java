@@ -17,6 +17,7 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.event.message.MessageEvent;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
@@ -24,6 +25,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -138,9 +140,11 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        //Initialize discord Bot
         DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
         System.out.println("discord bot built.");
 
+        //on message received
         api.addMessageCreateListener(event -> {
             System.out.println("Message received.");
 
@@ -159,8 +163,20 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
+            if (event.isPrivateMessage()){
+                System.out.println(String.format("private message received: %s", event.getMessageContent()));
+            }
+
 
             System.out.println(event.getMessageContent());
+
+            if (event.getMessageContent().equalsIgnoreCase(".debug")){
+
+                System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", channelsForTTS, textChannelForTTS));
+                for (Server x : api.getServers()){
+                    System.out.println(String.format("Now connected to: %s", x));
+                }
+            }
 
             Server server = event.getServer().get();
             System.out.println(String.format("in addMessageCreateListener: %s", server));
@@ -171,6 +187,8 @@ public class Main {
                 createWavFile(event.getMessageContent());
                 playAudio(api, "output.wav", audioConnection);
             }
+
+
 //            Long messageId = event.getMessageId();
 //            if (messageId == api.getClientId()){
 //                System.out.println(String.format("Detected self message ID: %d", messageId));
@@ -178,12 +196,12 @@ public class Main {
 //            System.out.println(event.getMessageId());
 
 
-            if (event.getMessageContent().equals(".yuki")) {
-                System.out.println("Message yuki received.");
-                event.getChannel().sendMessage("こんにちは");
-                System.out.println("Sent こんにちは.");
-
-            }
+//            if (event.getMessageContent().equals(".yuki")) {
+//                System.out.println("Message yuki received.");
+//                event.getChannel().sendMessage("こんにちは");
+//                System.out.println("Sent こんにちは.");
+//
+//            }
 
         });
 //       Source source = (AudioSource) ;
@@ -192,10 +210,13 @@ public class Main {
 
 //        SlashCommand command = SlashCommand.with("join", "connect to voice channel").createForServer(server).join();
 //        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createForServer(server).join();
+
+        //fegister slash commands
         SlashCommand command = SlashCommand.with("join", "connect to voice channel").createGlobal(api).join();
         SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createGlobal(api).join();
 
 
+        //on slash command hit
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
 
@@ -206,6 +227,8 @@ public class Main {
 //                VoiceChannel voiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
 //                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
                 ServerVoiceChannel serverVoiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
+
+                //connect to vc
                 serverVoiceChannel.connect().thenAccept(audioConnection -> {
 
 //                    audioConnectionGlobal = audioConnection;
@@ -214,6 +237,8 @@ public class Main {
                     createWavFile("ゆきの読み上げボットです！");
                     playAudio(api, "output.wav", audioConnection);
                     channel.sendMessage("Connected.");
+
+                    System.out.println(String.format("on server: %s", serverVoiceChannel));
 
                     //挨拶メッセージ
                     Path greetingFile = Paths.get("greeting.txt");
@@ -256,6 +281,8 @@ public class Main {
                     throwable.printStackTrace();
                     return null;
                 });
+
+                //slash command response on /join
                 slashcommandInteraction.createImmediateResponder()
                         .setContent("Connecting...").respond();
             } else if (slashcommandInteraction.getCommandName().equals("leave")) {

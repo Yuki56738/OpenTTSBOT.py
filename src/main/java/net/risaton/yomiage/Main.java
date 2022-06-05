@@ -5,10 +5,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioReference;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -16,12 +14,10 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.channel.VoiceChannel;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -161,6 +157,7 @@ public class Main {
         Server server = api.getServerById("813401986299854859").get();
 
         SlashCommand command = SlashCommand.with("join", "connect to voice channel").createForServer(server).join();
+        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createForServer(server).join();
 
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();

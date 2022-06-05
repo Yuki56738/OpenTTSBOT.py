@@ -10,12 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3c9f37d0-34cb-46f3-8421-93e77fdad0e2" name="変更" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/yuki_s_yomiage_bot_java_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/remote-targets.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mei_normal.htsvoice" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/yuki_s_yomiage_bot_java_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/yuki_s_yomiage_bot_java_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/risaton/yomiage/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/risaton/yomiage/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,8 +58,8 @@
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "アーティファクト",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "configurable.group.language"
+    "project.structure.side.proportion": "0.3954023",
+    "settings.editor.selected.configurable": "preferences.packagesearch.PackageSearchGeneralConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -114,7 +111,7 @@
       <workItem from="1654335691388" duration="92000" />
       <workItem from="1654335815343" duration="219000" />
       <workItem from="1654340419258" duration="11301000" />
-      <workItem from="1654365078079" duration="12548000" />
+      <workItem from="1654365078079" duration="17011000" />
     </task>
     <servers />
   </component>
@@ -137,7 +134,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/net/risaton/yomiage/Main.java</url>
-          <line>127</line>
+          <line>123</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

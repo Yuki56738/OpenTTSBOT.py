@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <groupId>net.risaton</groupId>
     <artifactId>yomiage-java</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -26,16 +27,17 @@
 <!--            <artifactId>lavaplayer</artifactId>-->
 <!--            <version>jmusicbot-5ae34fd221-1</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>3.2.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sedmelluq</groupId>-->
+<!--            <artifactId>lavaplayer</artifactId>-->
+<!--            <version>3.2.1</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
 
 </project>

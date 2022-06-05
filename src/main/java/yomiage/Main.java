@@ -14,13 +14,11 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
-import org.w3c.dom.Text;
 
 import java.awt.*;
 import java.io.File;
@@ -29,9 +27,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class Main {
     public static String TOKEN;
@@ -146,6 +144,19 @@ public class Main {
 
         api.addMessageCreateListener(event -> {
             System.out.println("Message received.");
+
+//            Long messageId = event.getMessageId();
+//            Long messageAuthor = event.getMessageAuthor().getId();
+//            if (messageAuthor == api.getClientId()){
+//                System.out.println(String.format("***Detected self message ID: %d", messageId));
+////                try {
+////                    Thread.sleep(2000); // 10秒(1万ミリ秒)間だけ処理を止める
+////                } catch (InterruptedException e) {
+////                }
+//                System.out.println("Deleting self message...");
+//                event.deleteMessage();
+//                System.out.println("Deleted.");
+//            }
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
@@ -161,6 +172,13 @@ public class Main {
                 createWavFile(event.getMessageContent());
                 playAudio(api, "output.wav", audioConnection);
             }
+//            Long messageId = event.getMessageId();
+//            if (messageId == api.getClientId()){
+//                System.out.println(String.format("Detected self message ID: %d", messageId));
+//            }
+//            System.out.println(event.getMessageId());
+
+
             if (event.getMessageContent().equals(".yuki")) {
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
@@ -208,12 +226,29 @@ public class Main {
                         throw new RuntimeException(e);
                     }
 //                    CompletableFuture<Message> messageBuilder =
+                    MessageBuilder message =
                     new MessageBuilder()
                             .setEmbed(new EmbedBuilder()
                                     .setTitle("Yukiの読み上げBOTv2")
                                     .setDescription(greetingMessage)
-                                    .setColor(Color.MAGENTA))
-                            .send(channel);
+                                    .setColor(Color.MAGENTA));
+//                    try {
+                        message.send(channel);
+//                    try {
+//                        Thread.sleep(10000); // 10秒(1万ミリ秒)間だけ処理を止める
+//                    } catch (InterruptedException e) {
+//                    }
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    channel.bulkDelete()
+//                    try {
+//                        Thread.sleep(2000); // 10秒(1万ミリ秒)間だけ処理を止める
+//                    } catch (InterruptedException e) {
+//                    }
+
+
+//                            .send(channel);
 //                    channel.sendMessage(greetingMessage);
 //                    messageBuilder
 

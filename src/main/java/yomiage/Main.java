@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -227,13 +226,13 @@ public class Main {
                     }
 //                    CompletableFuture<Message> messageBuilder =
                     MessageBuilder message =
-                    new MessageBuilder()
-                            .setEmbed(new EmbedBuilder()
-                                    .setTitle("Yukiの読み上げBOTv2")
-                                    .setDescription(greetingMessage)
-                                    .setColor(Color.MAGENTA));
+                            new MessageBuilder()
+                                    .setEmbed(new EmbedBuilder()
+                                            .setTitle("Yukiの読み上げBOTv2")
+                                            .setDescription(greetingMessage)
+                                            .setColor(Color.MAGENTA));
 //                    try {
-                        message.send(channel);
+                    message.send(channel);
 //                    try {
 //                        Thread.sleep(10000); // 10秒(1万ミリ秒)間だけ処理を止める
 //                    } catch (InterruptedException e) {

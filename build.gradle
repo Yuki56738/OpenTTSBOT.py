@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group 'net.risaton'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+dependencies { implementation 'org.javacord:javacord:3.4.0' }
+
+repositories {
+    maven {
+        url 'https://m2.dv8tion.net/releases'
+    }
+}
+
+dependencies {
+    implementation 'com.sedmelluq:lavaplayer:1.3.77'
+}
+
+test {
+    useJUnitPlatform()
+}

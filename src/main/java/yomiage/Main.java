@@ -14,11 +14,13 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
+import org.w3c.dom.Text;
 
 import java.awt.*;
 import java.io.File;
@@ -29,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class Main {
     public static String TOKEN;
@@ -37,6 +40,7 @@ public class Main {
 //    public static ServerVoiceChannel serverVoiceChannelGlobal;
 
     public static Map<Server, AudioConnection> channelsForTTS = new HashMap<>();
+    public static Map<Server, TextChannel> textChannelForTTS = new HashMap<>();
 
     public static void playAudio(DiscordApi api, String wavfile, AudioConnection audioConnection) {
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
@@ -152,8 +156,11 @@ public class Main {
             System.out.println(String.format("in addMessageCreateListener: %s", server));
 
             AudioConnection audioConnection = channelsForTTS.get(server);
-            createWavFile(event.getMessageContent());
-            playAudio(api, "output.wav", audioConnection);
+            TextChannel textChannel = textChannelForTTS.get(server);
+            if (event.getChannel().equals(textChannel)) {
+                createWavFile(event.getMessageContent());
+                playAudio(api, "output.wav", audioConnection);
+            }
             if (event.getMessageContent().equals(".yuki")) {
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
@@ -186,6 +193,7 @@ public class Main {
 
 //                    audioConnectionGlobal = audioConnection;
                     channelsForTTS.put(server, audioConnection);
+                    textChannelForTTS.put(server, channel);
                     createWavFile("ゆきの読み上げボットです！");
                     playAudio(api, "output.wav", audioConnection);
                     channel.sendMessage("Connected.");
@@ -199,6 +207,7 @@ public class Main {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+//                    CompletableFuture<Message> messageBuilder =
                     new MessageBuilder()
                             .setEmbed(new EmbedBuilder()
                                     .setTitle("Yukiの読み上げBOTv2")
@@ -206,6 +215,8 @@ public class Main {
                                     .setColor(Color.MAGENTA))
                             .send(channel);
 //                    channel.sendMessage(greetingMessage);
+//                    messageBuilder
+
 
                 }).exceptionally(throwable -> {
                     throwable.printStackTrace();
@@ -219,6 +230,8 @@ public class Main {
                 Server server = slashcommandInteraction.getServer().get();
                 ServerVoiceChannel serverVoiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
                 serverVoiceChannel.disconnect().join();
+                textChannelForTTS.remove(server);
+                channelsForTTS.remove(server);
             }
         });
     }

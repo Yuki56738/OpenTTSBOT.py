@@ -41,6 +41,7 @@
       <element id="file-copy" path="$PROJECT_DIR$/greeting.txt" />
       <element id="file-copy" path="$PROJECT_DIR$/test.wav" />
       <element id="file-copy" path="$PROJECT_DIR$/token.txt" />
+      <element id="file-copy" path="$PROJECT_DIR$/mei_normal.htsvoice" />
     </root>
   </artifact>
 </component>

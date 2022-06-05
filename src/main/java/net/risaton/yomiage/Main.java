@@ -23,6 +23,7 @@ import org.javacord.api.interaction.SlashCommandInteraction;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +35,7 @@ public class Main {
     public static AudioConnection audioConnectionGlobal;
     public static ServerVoiceChannel serverVoiceChannelGlobal;
 
-    public static void playAudio(DiscordApi api){
+    public static void playAudio(DiscordApi api, String wavfile) {
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         playerManager.registerSourceManager(new LocalAudioSourceManager());
         AudioPlayer player = playerManager.createPlayer();
@@ -45,7 +46,7 @@ public class Main {
 //        playAudio(playerManager, player);
 
 
-        playerManager.loadItem("test.wav", new AudioLoadResultHandler() {
+        playerManager.loadItem(wavfile, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 player.playTrack(audioTrack);
@@ -70,6 +71,59 @@ public class Main {
         });
     }
 
+    public static void createWavFile(String inputText) {
+//        String input_file = "input.txt";
+        Path input_file = Paths.get("input.txt");
+        if (Files.exists(input_file)) {
+            try {
+                Files.delete(input_file);
+                Files.createFile(input_file);
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        } else {
+            try {
+                Files.createFile(input_file);
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
+
+        File file = new File(input_file.toString());
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(inputText);
+            fileWriter.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        //Call open_jtalk
+        String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
+        String m = "./mei_normal.htsvoice";
+        String r = "0.7";
+        String ow = "output.wav";
+        String command = String.format("/usr/bin/open_jtalk -x %s -m %s -r %s -ow %s %s", x, m, r, ow, input_file);
+        System.out.println(command);
+
+        Runtime runtime = Runtime.getRuntime();
+        Process p = null;
+        try {
+            p = runtime.exec(command);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        try {
+            p.waitFor();
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+//        try {
+//            runtime.exec(command);
+//        } catch (IOException e) {
+//            System.out.println(e);
+//        }
+    }
+
     public static void main(String[] args) {
         Path file = Paths.get("token.txt");
         try {
@@ -85,18 +139,15 @@ public class Main {
 
         api.addMessageCreateListener(event -> {
             System.out.println("Message received.");
-            if (event.getMessageAuthor().isBotUser()){
+            if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
 
             System.out.println(event.getMessageContent());
 
-
-//            VoiceChannel voiceChannel = event.getMessageAuthor().getConnectedVoiceChannel().get();
-//            ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
-
-            playAudio(api);
-            if (event.getMessageContent().equals(".yuki")){
+            createWavFile(event.getMessageContent());
+            playAudio(api, "output.wav");
+            if (event.getMessageContent().equals(".yuki")) {
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
                 System.out.println("Sent こんにちは.");
@@ -133,7 +184,7 @@ public class Main {
 //                    playAudio(playerManager, player);
 //                audioConnection = audioConnection;
                     audioConnectionGlobal = audioConnection;
-                playAudio(api);
+                    playAudio(api, "test.wav");
 
                     channel.sendMessage("Connected.");
                 }).exceptionally(throwable -> {

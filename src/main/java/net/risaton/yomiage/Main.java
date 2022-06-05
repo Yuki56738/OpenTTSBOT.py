@@ -24,21 +24,25 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static String TOKEN;
 
-    public static AudioConnection audioConnectionGlobal;
-    public static ServerVoiceChannel serverVoiceChannelGlobal;
+//    public static AudioConnection audioConnectionGlobal;
+//    public static ServerVoiceChannel serverVoiceChannelGlobal;
 
-    public static void playAudio(DiscordApi api, String wavfile) {
+    public static Map<Server, AudioConnection> channelsForTTS = new HashMap<>();
+
+    public static void playAudio(DiscordApi api, String wavfile, AudioConnection audioConnection) {
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         playerManager.registerSourceManager(new LocalAudioSourceManager());
         AudioPlayer player = playerManager.createPlayer();
 
 
         AudioSource source = new LavaplayerAudioSource(api, player);
-        audioConnectionGlobal.setAudioSource(source);
+        audioConnection.setAudioSource(source);
 //        playAudio(playerManager, player);
 
 
@@ -141,8 +145,12 @@ public class Main {
 
             System.out.println(event.getMessageContent());
 
+            Server server = event.getServer().get();
+            System.out.println(String.format("in addMessageCreateListener: %s", server));
+
+            AudioConnection audioConnection = channelsForTTS.get(server);
             createWavFile(event.getMessageContent());
-            playAudio(api, "output.wav");
+            playAudio(api, "output.wav", audioConnection);
             if (event.getMessageContent().equals(".yuki")) {
                 System.out.println("Message yuki received.");
                 event.getChannel().sendMessage("こんにちは");
@@ -154,34 +162,30 @@ public class Main {
 //       Source source = (AudioSource) ;
 
         //Create slash commands
-        Server server = api.getServerById("813401986299854859").get();
+//        Server server = api.getServerById("813401986299854859").get();
 
-        SlashCommand command = SlashCommand.with("join", "connect to voice channel").createForServer(server).join();
-        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createForServer(server).join();
+//        SlashCommand command = SlashCommand.with("join", "connect to voice channel").createForServer(server).join();
+//        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createForServer(server).join();
+        SlashCommand command = SlashCommand.with("join", "connect to voice channel").createGlobal(api).join();
+        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createGlobal(api).join();
+
 
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
+
             if (slashcommandInteraction.getCommandName().equals("join")) {
-
-
+                Server server = slashcommandInteraction.getServer().get();
                 TextChannel channel = slashcommandInteraction.getChannel().get();
 //            channel.sendMessage("Connecting to channel...").join();
 //                VoiceChannel voiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
 //                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
-                serverVoiceChannelGlobal = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
-                serverVoiceChannelGlobal.connect().thenAccept(audioConnection -> {
-                    //Do stuff
-//                    AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-//                    playerManager.registerSourceManager(new LocalAudioSourceManager());
-//                    AudioPlayer player = playerManager.createPlayer();
-//
-//
-//                    AudioSource source = new LavaplayerAudioSource(api, player);
-//                    audioConnection.setAudioSource(source);
-//                    playAudio(playerManager, player);
-//                audioConnection = audioConnection;
-                    audioConnectionGlobal = audioConnection;
-                    playAudio(api, "test.wav");
+                ServerVoiceChannel serverVoiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
+                serverVoiceChannel.connect().thenAccept(audioConnection -> {
+
+//                    audioConnectionGlobal = audioConnection;
+                    channelsForTTS.put(server, audioConnection);
+                    playAudio(api, "test.wav", audioConnection);
+
 
                     channel.sendMessage("Connected.");
                 }).exceptionally(throwable -> {
@@ -193,6 +197,7 @@ public class Main {
             } else if (slashcommandInteraction.getCommandName().equals("leave")) {
                 slashcommandInteraction.createImmediateResponder()
                         .setContent("Disconnecting...").respond();
+                Server server = slashcommandInteraction.getServer().get();
                 ServerVoiceChannel serverVoiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
                 serverVoiceChannel.disconnect().join();
             }

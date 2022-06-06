@@ -22,6 +22,7 @@ import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageEvent;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
+import org.javacord.api.interaction.SlashCommandUpdater;
 
 import java.awt.*;
 import java.io.File;
@@ -33,6 +34,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static String TOKEN;
@@ -150,18 +153,6 @@ public class Main {
         api.addMessageCreateListener(event -> {
             System.out.println("Message received.");
 
-//            Long messageId = event.getMessageId();
-//            Long messageAuthor = event.getMessageAuthor().getId();
-//            if (messageAuthor == api.getClientId()){
-//                System.out.println(String.format("***Detected self message ID: %d", messageId));
-////                try {
-////                    Thread.sleep(2000); // 10秒(1万ミリ秒)間だけ処理を止める
-////                } catch (InterruptedException e) {
-////                }
-//                System.out.println("Deleting self message...");
-//                event.deleteMessage();
-//                System.out.println("Deleted.");
-//            }
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
@@ -186,7 +177,17 @@ public class Main {
             AudioConnection audioConnection = channelsForTTS.get(server);
             TextChannel textChannel = textChannelForTTS.get(server);
             if (event.getChannel().equals(textChannel)) {
-                createWavFile(event.getMessageContent());
+                String msg = event.getMessageContent();
+                Pattern p = Pattern.compile("[0-9]+>");
+                Matcher m = p.matcher(msg);
+                String msgReplaced;
+//                if (m.find()){
+                    msgReplaced =  msg.replaceAll("[0-9]+>","");
+//                }
+
+//                createWavFile(event.getMessageContent());
+                createWavFile(msgReplaced);
+
                 playAudio(api, "output.wav", audioConnection);
             }
 
@@ -216,7 +217,6 @@ public class Main {
         //fegister slash commands
         SlashCommand command = SlashCommand.with("join", "connect to voice channel").createGlobal(api).join();
         SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createGlobal(api).join();
-
 
         //on slash command hit
         api.addSlashCommandCreateListener(event -> {

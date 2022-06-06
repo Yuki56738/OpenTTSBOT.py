@@ -1,0 +1,1 @@
+worker: java -jar build/libs/yuki-s-yomiage-bot-v2-1.0-SNAPSHOT-all.jar

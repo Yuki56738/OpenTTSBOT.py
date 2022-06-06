@@ -14,9 +14,11 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.channel.VoiceChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageEvent;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
@@ -234,7 +236,7 @@ public class Main {
 //                    audioConnectionGlobal = audioConnection;
                     channelsForTTS.put(server, audioConnection);
                     textChannelForTTS.put(server, channel);
-                    createWavFile("ゆきの読み上げボットです！");
+                    createWavFile("オープン読み上げボットです！");
                     playAudio(api, "output.wav", audioConnection);
                     channel.sendMessage("Connected.");
 
@@ -253,7 +255,7 @@ public class Main {
                     MessageBuilder message =
                             new MessageBuilder()
                                     .setEmbed(new EmbedBuilder()
-                                            .setTitle("Yukiの読み上げBOTv2")
+                                            .setTitle("オープン読み上げBOTv2")
                                             .setDescription(greetingMessage)
                                             .setColor(Color.MAGENTA));
 //                    try {
@@ -295,5 +297,12 @@ public class Main {
                 channelsForTTS.remove(server);
             }
         });
+//        api.addServerVoiceChannelMemberJoinListener(event -> {
+//           System.out.println(event);
+//           System.out.println(event.getUser().getConnectedVoiceChannel(event.getServer()));
+//           ServerVoiceChannel serverVoiceChannel = event.getChannel();
+//           User user = event.getUser();
+//           user.getApi().disconnect();
+//        });
     }
 }

@@ -30,6 +30,9 @@ test {
     useJUnitPlatform()
 }
 
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
 jar {
     manifest {
         attributes 'Main-Class': 'yomiage.Main'

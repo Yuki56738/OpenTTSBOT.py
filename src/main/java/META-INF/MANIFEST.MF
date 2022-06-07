@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Main-Class: yomiage.Main
-Class-Path: httpclient-4.5.10.jar junit-platform-commons-1.8.1.jar jacks
- on-core-2.10.0.jar commons-logging-1.2.jar base64-2.3.9.jar bcprov-jdk1
- 5on-1.59.jar junit-platform-engine-1.8.1.jar commons-codec-1.11.jar jav
- acord-api-3.4.0.jar nv-websocket-client-2.6.jar lava-common-1.1.2.jar l
- ogging-interceptor-3.9.1.jar commons-io-2.6.jar httpcore-4.4.12.jar lav
- aplayer-1.3.77.jar jsoup-1.12.1.jar vavr-0.10.1.jar junit-jupiter-engin
- e-5.8.1.jar okhttp-3.9.1.jar jackson-annotations-2.10.0.jar jackson-dat
- abind-2.10.0.jar slf4j-api-1.7.25.jar okio-1.14.0.jar log4j-api-2.17.1.
- jar vavr-match-0.10.1.jar javacord-core-3.4.0.jar xsalsa20poly1305-0.10
- .1.jar lavaplayer-natives-1.3.14.jar junit-jupiter-api-5.8.1.jar opente
- st4j-1.2.0.jar
+Class-Path: okhttp-3.9.1.jar nv-websocket-client-2.6.jar httpclient-4.5.
+ 10.jar vavr-0.10.1.jar junit-jupiter-engine-5.8.1.jar javacord-api-3.4.
+ 0.jar commons-io-2.6.jar bcprov-jdk15on-1.59.jar lava-common-1.1.2.jar 
+ lavaplayer-1.3.77.jar jackson-core-2.10.0.jar junit-jupiter-api-5.8.1.j
+ ar opentest4j-1.2.0.jar base64-2.3.9.jar lavaplayer-natives-1.3.14.jar 
+ log4j-api-2.17.1.jar xsalsa20poly1305-0.10.1.jar junit-platform-commons
+ -1.8.1.jar jackson-annotations-2.10.0.jar httpcore-4.4.12.jar jackson-d
+ atabind-2.10.0.jar vavr-match-0.10.1.jar commons-logging-1.2.jar javaco
+ rd-core-3.4.0.jar okio-1.14.0.jar slf4j-api-1.7.25.jar jsoup-1.12.1.jar
+  logging-interceptor-3.9.1.jar commons-codec-1.11.jar junit-platform-en
+ gine-1.8.1.jar
 

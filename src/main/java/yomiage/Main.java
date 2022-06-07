@@ -14,21 +14,16 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.channel.VoiceChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
-import org.javacord.api.event.message.MessageEvent;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
-import org.javacord.api.interaction.SlashCommandUpdater;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -156,17 +151,17 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
-            if (event.isPrivateMessage()){
+            if (event.isPrivateMessage()) {
                 System.out.println(String.format("private message received: %s", event.getMessageContent()));
             }
 
 
             System.out.println(event.getMessageContent());
 
-            if (event.getMessageContent().equalsIgnoreCase(".debug")){
+            if (event.getMessageContent().equalsIgnoreCase(".debug")) {
 
                 System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", channelsForTTS, textChannelForTTS));
-                for (Server x : api.getServers()){
+                for (Server x : api.getServers()) {
                     System.out.println(String.format("Now connected to: %s", x));
                 }
             }
@@ -182,39 +177,26 @@ public class Main {
                 Matcher m = p.matcher(msg);
                 String msgReplaced;
 //                if (m.find()){
-                    msgReplaced =  msg.replaceAll("[0-9]+>","");
+                msgReplaced = msg.replaceAll("[0-9]+>", "");
 //                }
 
 //                createWavFile(event.getMessageContent());
+                if (msgReplaced.startsWith("http://")){
+                    msgReplaced = "URL省略";
+                } else if (msgReplaced.startsWith("https://")) {
+                    msgReplaced = "URL省略";
+                }
+                if (msgReplaced.length() >= 50){
+                    return;
+                }
                 createWavFile(msgReplaced);
 
                 playAudio(api, "output.wav", audioConnection);
             }
 
 
-//            Long messageId = event.getMessageId();
-//            if (messageId == api.getClientId()){
-//                System.out.println(String.format("Detected self message ID: %d", messageId));
-//            }
-//            System.out.println(event.getMessageId());
-
-
-//            if (event.getMessageContent().equals(".yuki")) {
-//                System.out.println("Message yuki received.");
-//                event.getChannel().sendMessage("こんにちは");
-//                System.out.println("Sent こんにちは.");
-//
-//            }
-
         });
-//       Source source = (AudioSource) ;
-
-        //Create slash commands
-
-//        SlashCommand command = SlashCommand.with("join", "connect to voice channel").createForServer(server).join();
-//        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createForServer(server).join();
-
-        //fegister slash commands
+        //egister slash commands
         SlashCommand command = SlashCommand.with("join", "connect to voice channel").createGlobal(api).join();
         SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createGlobal(api).join();
 
@@ -225,9 +207,6 @@ public class Main {
             if (slashcommandInteraction.getCommandName().equals("join")) {
                 Server server = slashcommandInteraction.getServer().get();
                 TextChannel channel = slashcommandInteraction.getChannel().get();
-//            channel.sendMessage("Connecting to channel...").join();
-//                VoiceChannel voiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
-//                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) voiceChannel;
                 ServerVoiceChannel serverVoiceChannel = slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
 
                 //connect to vc
@@ -260,24 +239,6 @@ public class Main {
                                             .setColor(Color.MAGENTA));
 //                    try {
                     message.send(channel);
-//                    try {
-//                        Thread.sleep(10000); // 10秒(1万ミリ秒)間だけ処理を止める
-//                    } catch (InterruptedException e) {
-//                    }
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                    channel.bulkDelete()
-//                    try {
-//                        Thread.sleep(2000); // 10秒(1万ミリ秒)間だけ処理を止める
-//                    } catch (InterruptedException e) {
-//                    }
-
-
-//                            .send(channel);
-//                    channel.sendMessage(greetingMessage);
-//                    messageBuilder
-
 
                 }).exceptionally(throwable -> {
                     throwable.printStackTrace();
@@ -297,12 +258,10 @@ public class Main {
                 channelsForTTS.remove(server);
             }
         });
-//        api.addServerVoiceChannelMemberJoinListener(event -> {
-//           System.out.println(event);
-//           System.out.println(event.getUser().getConnectedVoiceChannel(event.getServer()));
-//           ServerVoiceChannel serverVoiceChannel = event.getChannel();
-//           User user = event.getUser();
-//           user.getApi().disconnect();
-//        });
+
+        //on joined bot server
+        api.addServerJoinListener(event -> {
+           System.out.println(String.format("Joined to bot server: %s", event.getServer()));
+        });
     }
 }

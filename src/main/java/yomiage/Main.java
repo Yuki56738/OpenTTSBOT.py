@@ -14,9 +14,11 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.channel.VoiceChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
@@ -29,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -176,11 +179,8 @@ public class Main {
                 Pattern p = Pattern.compile("[0-9]+>");
                 Matcher m = p.matcher(msg);
                 String msgReplaced;
-//                if (m.find()){
                 msgReplaced = msg.replaceAll("[0-9]+>", "");
-//                }
-
-//                createWavFile(event.getMessageContent());
+                msgReplaced = msgReplaced.replaceAll("\n", " ");
                 if (msgReplaced.startsWith("http://")){
                     msgReplaced = "URL省略";
                 } else if (msgReplaced.startsWith("https://")) {
@@ -199,6 +199,7 @@ public class Main {
         //egister slash commands
         SlashCommand command = SlashCommand.with("join", "connect to voice channel").createGlobal(api).join();
         SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createGlobal(api).join();
+//        List commandList = api.getGlobalSlashCommands().join();
 
         //on slash command hit
         api.addSlashCommandCreateListener(event -> {
@@ -263,5 +264,35 @@ public class Main {
         api.addServerJoinListener(event -> {
            System.out.println(String.format("Joined to bot server: %s", event.getServer()));
         });
+
+        api.addServerVoiceChannelMemberJoinListener(event -> {
+            if (event.getUser().isBot()){
+                return;
+            }
+            AudioConnection audioConnection = channelsForTTS.get(event.getServer());
+            TextChannel textChannel= textChannelForTTS.get(event.getServer());
+            createWavFile(String.format("%sが参加したよ。", event.getUser().getDisplayName(event.getServer())));
+            playAudio(api, "output.wav", audioConnection);
+        });
+        api.addServerVoiceChannelMemberLeaveListener(event -> {
+            if (event.getUser().isBot()){
+                return;
+            }
+            AudioConnection audioConnection = channelsForTTS.get(event.getServer());
+            TextChannel textChannel= textChannelForTTS.get(event.getServer());
+            System.out.println();
+//            if (audioConnection.getChannel().asServerVoiceChannel()){
+//                System.out.println(String.format("ServerVoiceChannel is empty."));
+//                return;
+//            }
+            createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())));
+            playAudio(api, "output.wav", audioConnection);
+//            VoiceChannel voiceChannel = event.getChannel();
+//            System.out.println(audioConnection.getChannel().getConnectedUsers());
+//            if (audioConnection.getChannel().getConnectedUsers().remo((Predicate<? super User>) api.getUserById(api.getClientId()))){
+//                audioConnection.getChannel().disconnect().join();
+//            }
+        });
+
     }
 }

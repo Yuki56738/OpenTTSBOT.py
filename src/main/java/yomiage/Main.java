@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -15,12 +16,16 @@ import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.channel.VoiceChannel;
+import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageActivityType;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
+import org.javacord.api.interaction.SlashCommandOption;
+import org.javacord.api.interaction.SlashCommandOptionType;
 
 import java.awt.*;
 import java.io.File;
@@ -31,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,6 +85,41 @@ public class Main {
             }
         });
     }
+//    public static void playAudioRemote(DiscordApi api, String remoteSource, AudioConnection audioConnection){
+//        // Create a player manager
+//        AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+//        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
+//        AudioPlayer player = playerManager.createPlayer();
+//
+//// Create an audio source and add it to the audio connection's queue
+//        AudioSource source = new LavaplayerAudioSource(api, player);
+//        audioConnection.setAudioSource(source);
+//
+//// You can now use the AudioPlayer like you would normally do with Lavaplayer, e.g.,
+//        playerManager.loadItem(remoteSource, new AudioLoadResultHandler() {
+//            @Override
+//            public void trackLoaded(AudioTrack track) {
+//                player.playTrack(track);
+//            }
+//
+//            @Override
+//            public void playlistLoaded(AudioPlaylist playlist) {
+//                for (AudioTrack track : playlist.getTracks()) {
+//                    player.playTrack(track);
+//                }
+//            }
+//
+//            @Override
+//            public void noMatches() {
+//                // Notify the user that we've got nothing
+//            }
+//
+//            @Override
+//            public void loadFailed(FriendlyException throwable) {
+//                // Notify the user that everything exploded
+//            }
+//        });
+//    };
 
     public static void createWavFile(String inputText) {
 //        String input_file = "input.txt";
@@ -157,7 +198,10 @@ public class Main {
             if (event.isPrivateMessage()) {
                 System.out.println(String.format("private message received: %s", event.getMessageContent()));
             }
-
+//            if (event.getMessage().getMentionedUsers()){
+//                System.out.println("Mentionned.");
+//            }
+//            System.out.println(String.format("mention: %s", event.getMessage().);
 
             System.out.println(event.getMessageContent());
 
@@ -167,6 +211,7 @@ public class Main {
                 for (Server x : api.getServers()) {
                     System.out.println(String.format("Now connected to: %s", x));
                 }
+
             }
 
             Server server = event.getServer().get();
@@ -193,12 +238,21 @@ public class Main {
 
                 playAudio(api, "output.wav", audioConnection);
             }
+            Message message = event.getMessage();
+            if (message.getMentionedUsers().contains(api.getYourself())){
+                System.out.println("mentiond.");
+                TextChannel textChannel1 = event.getChannel();
+                event.getMessage().reply(message.getContent());
+                if (message.getContent().contains("play")){
 
+                }
+            }
 
         });
         //egister slash commands
-        SlashCommand command = SlashCommand.with("join", "connect to voice channel").createGlobal(api).join();
-        SlashCommand commandLeave = SlashCommand.with("leave", "disconnect from voice channnel").createGlobal(api).join();
+        SlashCommand command = SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
+        SlashCommand commandLeave = SlashCommand.with("leave", "切断します。").createGlobal(api).join();
+//        SlashCommand commandPlay = SlashCommand.with("play", "音楽を再生します。")
 //        List commandList = api.getGlobalSlashCommands().join();
 
         //on slash command hit
@@ -239,12 +293,15 @@ public class Main {
                                             .setDescription(greetingMessage)
                                             .setColor(Color.MAGENTA));
 //                    try {
-                    message.send(channel);
+//                    CompletableFuture<Message> message1 = message.send(channel);
+
+
 
                 }).exceptionally(throwable -> {
                     throwable.printStackTrace();
                     return null;
                 });
+
 
                 //slash command response on /join
                 slashcommandInteraction.createImmediateResponder()

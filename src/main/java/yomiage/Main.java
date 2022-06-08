@@ -280,7 +280,7 @@ public class Main {
             }
             AudioConnection audioConnection = channelsForTTS.get(event.getServer());
             TextChannel textChannel= textChannelForTTS.get(event.getServer());
-            System.out.println();
+//            System.out.println();
 //            if (audioConnection.getChannel().asServerVoiceChannel()){
 //                System.out.println(String.format("ServerVoiceChannel is empty."));
 //                return;

@@ -5,7 +5,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -15,17 +14,13 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.channel.VoiceChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageActivityType;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
-import org.javacord.api.interaction.SlashCommandOption;
-import org.javacord.api.interaction.SlashCommandOptionType;
+import org.javacord.api.listener.connection.LostConnectionListener;
 
 import java.awt.*;
 import java.io.File;
@@ -36,8 +31,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -185,7 +178,9 @@ public class Main {
         }
 
         //Initialize discord Bot
-        DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
+        DiscordApi api = new DiscordApiBuilder()
+                .setToken(TOKEN)
+                .login().join();
         System.out.println("discord bot built.");
 
         //on message received
@@ -289,7 +284,7 @@ public class Main {
                     MessageBuilder message =
                             new MessageBuilder()
                                     .setEmbed(new EmbedBuilder()
-                                            .setTitle("オープン読み上げBOTv2")
+                                            .setTitle("Open読み上げBOTv2")
                                             .setDescription(greetingMessage)
                                             .setColor(Color.MAGENTA));
 //                    try {
@@ -328,7 +323,9 @@ public class Main {
             }
             AudioConnection audioConnection = channelsForTTS.get(event.getServer());
             TextChannel textChannel= textChannelForTTS.get(event.getServer());
-            createWavFile(String.format("%sが参加したよ。", event.getUser().getDisplayName(event.getServer())));
+            Server server = event.getServer();
+            String member = event.getUser().getDisplayName(event.getServer());
+            createWavFile(String.format("%sが参加したよ。", member));
             playAudio(api, "output.wav", audioConnection);
         });
         api.addServerVoiceChannelMemberLeaveListener(event -> {
@@ -350,6 +347,5 @@ public class Main {
 //                audioConnection.getChannel().disconnect().join();
 //            }
         });
-
     }
 }

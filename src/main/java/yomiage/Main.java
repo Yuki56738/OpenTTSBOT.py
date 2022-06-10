@@ -78,41 +78,6 @@ public class Main {
             }
         });
     }
-//    public static void playAudioRemote(DiscordApi api, String remoteSource, AudioConnection audioConnection){
-//        // Create a player manager
-//        AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-//        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
-//        AudioPlayer player = playerManager.createPlayer();
-//
-//// Create an audio source and add it to the audio connection's queue
-//        AudioSource source = new LavaplayerAudioSource(api, player);
-//        audioConnection.setAudioSource(source);
-//
-//// You can now use the AudioPlayer like you would normally do with Lavaplayer, e.g.,
-//        playerManager.loadItem(remoteSource, new AudioLoadResultHandler() {
-//            @Override
-//            public void trackLoaded(AudioTrack track) {
-//                player.playTrack(track);
-//            }
-//
-//            @Override
-//            public void playlistLoaded(AudioPlaylist playlist) {
-//                for (AudioTrack track : playlist.getTracks()) {
-//                    player.playTrack(track);
-//                }
-//            }
-//
-//            @Override
-//            public void noMatches() {
-//                // Notify the user that we've got nothing
-//            }
-//
-//            @Override
-//            public void loadFailed(FriendlyException throwable) {
-//                // Notify the user that everything exploded
-//            }
-//        });
-//    };
 
     public static void createWavFile(String inputText) {
 //        String input_file = "input.txt";

@@ -1,1 +1,1 @@
-worker: java -jar build/libs/yuki-s-yomiage-bot-v2-1.0-SNAPSHOT-all.jar
+web: java -jar out/artifacts/yuki_s_yomiage_bot_v2_jar/yuki-s-yomiage-bot-v2.jar

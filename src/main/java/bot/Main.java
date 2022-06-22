@@ -125,7 +125,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(is)); // テキスト読み込みを行えるようにする
 
         while (true) {
-            String line = null;
+            String line;
             try {
                 line = br.readLine();
             } catch (IOException e) {
@@ -142,7 +142,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Path file = Paths.get("token.txt");
+        Path file;
+        file = Paths.get("token.txt");
 
         Dotenv dotenv;
 
@@ -207,13 +208,13 @@ public class Main {
                 }
 
                 Message message = event.getMessage();
-                if (message.getMentionedUsers().contains(api.getYourself())) {
-                    System.out.println("mentiond.");
-                    TextChannel textChannel1 = event.getChannel();
-                    event.getMessage().reply(message.getContent());
-                    if (message.getContent().contains("play")) {
-                    }
-                }
+//                if (message.getMentionedUsers().contains(api.getYourself())) {
+//                    System.out.println("mentiond.");
+//                    TextChannel textChannel1 = event.getChannel();
+//                    event.getMessage().reply(message.getContent());
+//                    if (message.getContent().contains("play")) {
+//                    }
+//                }
 
             }
         });

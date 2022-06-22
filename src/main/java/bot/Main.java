@@ -163,6 +163,9 @@ public class Main {
         System.out.println("discord bot built.");
         api.addMessageCreateListener((event) -> {
             System.out.println("Message received.");
+            if (event.getMessageAuthor().isBotUser()){
+                return;
+            }
             if (!event.getMessageAuthor().isBotUser()) {
                 if (event.isPrivateMessage()) {
                     System.out.println(String.format("private message received: %s", event.getMessageContent()));

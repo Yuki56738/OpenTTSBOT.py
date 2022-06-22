@@ -47,7 +47,7 @@
       <element id="library" level="project" name="Gradle: net.iharder:base64:2.3.9" />
       <element id="file-copy" path="$PROJECT_DIR$/greeting.txt" />
       <element id="file-copy" path="$PROJECT_DIR$/mei_normal.htsvoice" />
-      <element id="file-copy" path="$PROJECT_DIR$/token.txt" />
+      <element id="file-copy" path="$PROJECT_DIR$/.env" />
     </root>
   </artifact>
 </component>

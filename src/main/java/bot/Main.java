@@ -149,12 +149,14 @@ public class Main {
         if (Files.exists(Paths.get(".env"))){
             dotenv = Dotenv.load();
             TOKEN = dotenv.get("DISCORD_TOKEN");
-        }
-        try {
-            TOKEN = Files.readString(file);
-            System.out.println("discord token read.");
-        } catch (IOException var5) {
-            throw new RuntimeException(var5);
+            System.out.println("discord token read with dotenv-java.");
+        }else {
+            try {
+                TOKEN = Files.readString(file);
+                System.out.println("discord token read.");
+            } catch (IOException var5) {
+                throw new RuntimeException(var5);
+            }
         }
 
         DiscordApi api = (DiscordApi)(new DiscordApiBuilder()).setToken(TOKEN).login().join();

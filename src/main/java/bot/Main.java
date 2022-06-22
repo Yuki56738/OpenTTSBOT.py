@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import io.github.cdimascio.dotenv.Dotenv;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.audio.AudioConnection;
@@ -39,7 +41,7 @@ import org.javacord.api.interaction.callback.InteractionImmediateResponseBuilder
 
 public class Main {
     public static String TOKEN;
-    public static Map<Server, AudioConnection> channelsForTTS = new HashMap();
+    public static Map<Server, AudioConnection> audioConnectionForTTS = new HashMap();
     public static Map<Server, TextChannel> textChannelForTTS = new HashMap();
 
 
@@ -139,8 +141,15 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
         Path file = Paths.get("token.txt");
 
+        Dotenv dotenv;
+
+        if (Files.exists(Paths.get(".env"))){
+            dotenv = Dotenv.load();
+            TOKEN = dotenv.get("DISCORD_TOKEN");
+        }
         try {
             TOKEN = Files.readString(file);
             System.out.println("discord token read.");
@@ -159,7 +168,7 @@ public class Main {
 
                 System.out.println(event.getMessageContent());
                 if (event.getMessageContent().equalsIgnoreCase(".debug")) {
-                    System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", channelsForTTS, textChannelForTTS));
+                    System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
                     Iterator var2 = api.getServers().iterator();
 
                     while(var2.hasNext()) {
@@ -170,7 +179,7 @@ public class Main {
 
                 Server server = (Server)event.getServer().get();
                 System.out.println(String.format("in addMessageCreateListener: %s", server));
-                AudioConnection audioConnection = (AudioConnection)channelsForTTS.get(server);
+                AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(server);
                 TextChannel textChannel = (TextChannel)textChannelForTTS.get(server);
                 if (event.getChannel().equals(textChannel)) {
                     String msg = event.getMessageContent();
@@ -213,7 +222,7 @@ public class Main {
                 TextChannel channel = (TextChannel)slashcommandInteraction.getChannel().get();
                 ServerVoiceChannel serverVoiceChannelx = (ServerVoiceChannel)slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
                 serverVoiceChannelx.connect().thenAccept((audioConnection) -> {
-                    channelsForTTS.put(server, audioConnection);
+                    audioConnectionForTTS.put(server, audioConnection);
                     textChannelForTTS.put(server, channel);
                     createWavFile("オープン読み上げボットです！");
                     playAudio(api, "output.wav", audioConnection);
@@ -241,7 +250,7 @@ public class Main {
                 ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel)slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
                 serverVoiceChannel.disconnect().join();
                 textChannelForTTS.remove(server);
-                channelsForTTS.remove(server);
+                audioConnectionForTTS.remove(server);
             }
 
         });
@@ -250,7 +259,7 @@ public class Main {
         });
         api.addServerVoiceChannelMemberJoinListener((event) -> {
             if (!event.getUser().isBot()) {
-                AudioConnection audioConnection = (AudioConnection)channelsForTTS.get(event.getServer());
+                AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
                 TextChannel var10000 = (TextChannel)textChannelForTTS.get(event.getServer());
                 Server server = event.getServer();
                 String member = event.getUser().getDisplayName(event.getServer());
@@ -260,7 +269,7 @@ public class Main {
         });
         api.addServerVoiceChannelMemberLeaveListener((event) -> {
             if (!event.getUser().isBot()) {
-                AudioConnection audioConnection = (AudioConnection)channelsForTTS.get(event.getServer());
+                AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
                 TextChannel var10000 = (TextChannel)textChannelForTTS.get(event.getServer());
                 createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())));
                 playAudio(api, "output.wav", audioConnection);

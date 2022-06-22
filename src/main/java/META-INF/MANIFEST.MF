@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Main-Class: bot.Main
+Class-Path: jsoup-1.12.1.jar annotations-13.0.jar slf4j-api-1.7.25.jar n
+ v-websocket-client-2.14.jar log4j-1.2.17.jar javacord-core-3.5.0.jar ju
+ nit-platform-engine-1.8.1.jar vavr-match-0.10.4.jar jackson-core-2.12.6
+ .jar kotlin-stdlib-1.4.10.jar javacord-api-3.5.0.jar httpclient-4.5.10.
+ jar logging-interceptor-4.9.3.jar log4j-api-2.17.2.jar xsalsa20poly1305
+ -0.11.0.jar lavaplayer-natives-1.3.14.jar okio-jvm-2.8.0.jar bcprov-jdk
+ 15on-1.60.jar opentest4j-1.2.0.jar junit-jupiter-api-5.8.1.jar commons-
+ codec-1.11.jar kotlin-stdlib-jdk8-1.4.10.jar httpcore-4.4.12.jar okhttp
+ -4.9.3.jar slf4j-log4j12-1.7.0.jar junit-jupiter-engine-5.8.1.jar vavr-
+ 0.10.4.jar kotlin-stdlib-jdk7-1.4.10.jar kotlin-stdlib-common-1.4.10.ja
+ r junit-platform-commons-1.8.1.jar jackson-databind-2.12.6.jar commons-
+ io-2.6.jar lavaplayer-1.3.77.jar commons-logging-1.2.jar lava-common-1.
+ 1.2.jar jackson-annotations-2.12.6.jar base64-2.3.9.jar
+

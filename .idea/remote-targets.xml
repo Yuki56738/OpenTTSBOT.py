@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="ubuntu@primary.local:22" type="ssh/sftp" uuid="2aa682b0-2e0a-4e61-9b43-7b4e754bfed4">
+        <config>
+          <option name="projectRootOnTarget" value="/home/ubuntu/OpenYomiageBot-3" />
+          <option name="serverName" value="ubuntu@primary.local:22 password" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr" />
+            <option name="javaVersionString" value="11.0.15" />
+          </config>
+        </ContributedStateBase>
+      </target>
+      <target name="ubuntu@risaton.net:22" type="ssh/sftp" uuid="1ecee743-036e-4e3d-9397-a9150e55b040">
+        <config>
+          <option name="projectRootOnTarget" value="/home/ubuntu/OpenYomiageBot-3" />
+          <option name="serverName" value="ubuntu@risaton.net:22 agent" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr" />
+            <option name="javaVersionString" value="11.0.15" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>

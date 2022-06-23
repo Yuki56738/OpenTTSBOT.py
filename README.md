@@ -17,3 +17,18 @@ brew install open-jtalk
 brew install mecab
 brew install mecab-ipadic
 ```
+1. 依存関係のインストール
+```
+brew install open-jtalk  
+brew install mecab
+brew install mecab-ipadic
+```
+2. トークンを記述
+```
+vi .env
+```
+
+3. 実行
+```shell
+java -jar OpenYomiageBot-3.jar
+```

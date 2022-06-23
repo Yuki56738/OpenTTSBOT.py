@@ -153,7 +153,7 @@ public class Main {
 
 //        if (Files.exists(Paths.get(".env"))){
         dotenv = Dotenv.load();
-        TOKEN = dotenv.get("DISCORD_TOKEN");
+        TOKEN = dotenv.get("DISCORD_TOKEN_rel");
         System.out.println("discord token read with dotenv-java.");
 //        }else {
 //        try {

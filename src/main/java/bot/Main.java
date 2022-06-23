@@ -13,17 +13,6 @@ import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import java.awt.Color;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -39,6 +28,17 @@ import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.interaction.callback.InteractionImmediateResponseBuilder;
 
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 public class Main {
     public static String TOKEN;
     public static Map<Server, AudioConnection> audioConnectionForTTS = new HashMap();
@@ -46,6 +46,9 @@ public class Main {
 
 
     public static void playAudio(DiscordApi api, String wavfile, AudioConnection audioConnection) {
+        if (audioConnection.getChannel().getIdAsString().isBlank()) {
+            return;
+        }
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         playerManager.registerSourceManager(new LocalAudioSourceManager());
         final AudioPlayer player = playerManager.createPlayer();
@@ -59,8 +62,8 @@ public class Main {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 Iterator var2 = audioPlaylist.getTracks().iterator();
 
-                while(var2.hasNext()) {
-                    AudioTrack track = (AudioTrack)var2.next();
+                while (var2.hasNext()) {
+                    AudioTrack track = (AudioTrack) var2.next();
                     player.playTrack(track);
                 }
 
@@ -147,24 +150,24 @@ public class Main {
 
         Dotenv dotenv;
 
-        if (Files.exists(Paths.get(".env"))){
-            dotenv = Dotenv.load();
-            TOKEN = dotenv.get("DISCORD_TOKEN");
-            System.out.println("discord token read with dotenv-java.");
-        }else {
-            try {
-                TOKEN = Files.readString(file);
-                System.out.println("discord token read.");
-            } catch (IOException var5) {
-                throw new RuntimeException(var5);
-            }
-        }
+//        if (Files.exists(Paths.get(".env"))){
+        dotenv = Dotenv.load();
+        TOKEN = dotenv.get("DISCORD_TOKEN");
+        System.out.println("discord token read with dotenv-java.");
+//        }else {
+//        try {
+//            TOKEN = Files.readString(file);
+//            System.out.println("discord token read.");
+//        } catch (IOException var5) {
+//            throw new RuntimeException(var5);
+//        }
 
-        DiscordApi api = (DiscordApi)(new DiscordApiBuilder()).setToken(TOKEN).login().join();
+
+        DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
         System.out.println("discord bot built.");
         api.addMessageCreateListener((event) -> {
             System.out.println("Message received.");
-            if (event.getMessageAuthor().isBotUser()){
+            if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
             if (!event.getMessageAuthor().isBotUser()) {
@@ -177,16 +180,16 @@ public class Main {
                     System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
                     Iterator var2 = api.getServers().iterator();
 
-                    while(var2.hasNext()) {
-                        Server x = (Server)var2.next();
+                    while (var2.hasNext()) {
+                        Server x = (Server) var2.next();
                         System.out.println(String.format("Now connected to: %s", x));
                     }
                 }
 
-                Server server = (Server)event.getServer().get();
+                Server server = (Server) event.getServer().get();
                 System.out.println(String.format("in addMessageCreateListener: %s", server));
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(server);
-                TextChannel textChannel = (TextChannel)textChannelForTTS.get(server);
+                TextChannel textChannel = (TextChannel) textChannelForTTS.get(server);
                 if (event.getChannel().equals(textChannel)) {
                     String msg = event.getMessageContent();
                     Pattern p = Pattern.compile("[0-9]+>");
@@ -218,22 +221,37 @@ public class Main {
 
             }
         });
-        SlashCommand command = (SlashCommand)SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
-        SlashCommand commandLeave = (SlashCommand)SlashCommand.with("leave", "切断します。").createGlobal(api).join();
+        SlashCommand command = (SlashCommand) SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
+        SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave", "切断します。").createGlobal(api).join();
         api.addSlashCommandCreateListener((event) -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
             Server server;
+            if (slashcommandInteraction.getUser().isBot()) {
+                return;
+            }
             if (slashcommandInteraction.getCommandName().equals("join")) {
-                server = (Server)slashcommandInteraction.getServer().get();
-                TextChannel channel = (TextChannel)slashcommandInteraction.getChannel().get();
-                ServerVoiceChannel serverVoiceChannelx = (ServerVoiceChannel)slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
-                serverVoiceChannelx.connect().thenAccept((audioConnection) -> {
+                server = (Server) slashcommandInteraction.getServer().get();
+                TextChannel channel = (TextChannel) slashcommandInteraction.getChannel().get();
+                ServerVoiceChannel serverVoiceChannel;
+                try {
+                    serverVoiceChannel = (ServerVoiceChannel) slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
+
+                } catch (Exception e) {
+//                    System.out.println(e.getMessage());
+                    slashcommandInteraction.createImmediateResponder()
+                            .setContent("どこのボイスチャンネルにも参加していません！")
+                            .respond();
+
+                    throw new RuntimeException(e);
+                }
+
+                serverVoiceChannel.connect().thenAccept((audioConnection) -> {
                     audioConnectionForTTS.put(server, audioConnection);
                     textChannelForTTS.put(server, channel);
                     createWavFile("オープン読み上げボットです！");
                     playAudio(api, "output.wav", audioConnection);
                     channel.sendMessage("Connected.");
-                    System.out.println(String.format("on server: %s", serverVoiceChannelx));
+                    System.out.println(String.format("on server: %s", serverVoiceChannel));
                     Path greetingFile = Paths.get("greeting.txt");
 
                     String greetingMessage;
@@ -243,17 +261,17 @@ public class Main {
                         throw new RuntimeException(var8);
                     }
 
-                    MessageBuilder message = (MessageBuilder)(new MessageBuilder()).setEmbed((new EmbedBuilder()).setTitle("Open読み上げBOTv2").setDescription(greetingMessage).setColor(Color.MAGENTA));
+                    MessageBuilder message = (MessageBuilder) (new MessageBuilder()).setEmbed((new EmbedBuilder()).setTitle("Open読み上げBOTv2").setDescription(greetingMessage).setColor(Color.MAGENTA));
                     message.send(channel);
                 }).exceptionally((throwable) -> {
                     throwable.printStackTrace();
                     return null;
                 });
-                ((InteractionImmediateResponseBuilder)slashcommandInteraction.createImmediateResponder().setContent("Connecting...")).respond();
+                ((InteractionImmediateResponseBuilder) slashcommandInteraction.createImmediateResponder().setContent("Connecting...")).respond();
             } else if (slashcommandInteraction.getCommandName().equals("leave")) {
-                ((InteractionImmediateResponseBuilder)slashcommandInteraction.createImmediateResponder().setContent("Disconnecting...")).respond();
-                server = (Server)slashcommandInteraction.getServer().get();
-                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel)slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
+                ((InteractionImmediateResponseBuilder) slashcommandInteraction.createImmediateResponder().setContent("Disconnecting...")).respond();
+                server = (Server) slashcommandInteraction.getServer().get();
+                ServerVoiceChannel serverVoiceChannel = (ServerVoiceChannel) slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
                 serverVoiceChannel.disconnect().join();
                 textChannelForTTS.remove(server);
                 audioConnectionForTTS.remove(server);
@@ -266,7 +284,7 @@ public class Main {
         api.addServerVoiceChannelMemberJoinListener((event) -> {
             if (!event.getUser().isBot()) {
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
-                TextChannel var10000 = (TextChannel)textChannelForTTS.get(event.getServer());
+                TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
                 Server server = event.getServer();
                 String member = event.getUser().getDisplayName(event.getServer());
                 createWavFile(String.format("%sが参加したよ。", member));
@@ -276,7 +294,7 @@ public class Main {
         api.addServerVoiceChannelMemberLeaveListener((event) -> {
             if (!event.getUser().isBot()) {
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
-                TextChannel var10000 = (TextChannel)textChannelForTTS.get(event.getServer());
+                TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
                 createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())));
                 playAudio(api, "output.wav", audioConnection);
             }

@@ -41,6 +41,8 @@ import java.util.regex.Pattern;
 
 public class Main {
     public static String TOKEN;
+
+    public static boolean IsM1Mac = false;
     public static Map<Server, AudioConnection> audioConnectionForTTS = new HashMap();
     public static Map<Server, TextChannel> textChannelForTTS = new HashMap();
 
@@ -104,8 +106,12 @@ public class Main {
             System.out.println(var13);
         }
 
+
 //        String x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
         String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
+        if (IsM1Mac){
+            x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
+        }
         String m = "./mei_normal.htsvoice";
         String r = "0.7";
         String ow = "output.wav";
@@ -155,6 +161,9 @@ public class Main {
         dotenv = Dotenv.load();
         TOKEN = dotenv.get("DISCORD_TOKEN_rel");
         System.out.println("discord token read with dotenv-java.");
+        if (dotenv.get("M1Mac").equalsIgnoreCase("true")){
+            IsM1Mac = true;
+        }
 //        }else {
 //        try {
 //            TOKEN = Files.readString(file);

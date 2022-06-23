@@ -104,11 +104,12 @@ public class Main {
             System.out.println(var13);
         }
 
+//        String x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
         String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
         String m = "./mei_normal.htsvoice";
         String r = "0.7";
         String ow = "output.wav";
-        String command = String.format("/usr/bin/open_jtalk -x %s -m %s -r %s -ow %s %s", x, m, r, ow, input_file);
+        String command = String.format("open_jtalk -x %s -m %s -r %s -ow %s %s", x, m, r, ow, input_file);
         System.out.println(command);
         Runtime runtime = Runtime.getRuntime();
         Process p = null;

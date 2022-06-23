@@ -1,11 +1,8 @@
 <component name="ArtifactManager">
-  <artifact name="OpenYomiageBot-3:jar">
+  <artifact build-on-make="true" name="OpenYomiageBot-3:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/OpenYomiageBot_3_jar</output-path>
     <root id="root">
       <element id="archive" name="OpenYomiageBot-3.jar">
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
-        </element>
         <element id="module-output" name="OpenYomiageBot-3.main" />
       </element>
       <element id="library" level="project" name="Gradle: org.bouncycastle:bcprov-jdk15on:1.60" />
@@ -46,9 +43,9 @@
       <element id="library" level="project" name="Gradle: io.vavr:vavr-match:0.10.4" />
       <element id="library" level="project" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.8.2" />
       <element id="library" level="project" name="Gradle: org.junit.platform:junit-platform-commons:1.8.2" />
+      <element id="file-copy" path="$PROJECT_DIR$/.env" />
       <element id="file-copy" path="$PROJECT_DIR$/greeting.txt" />
       <element id="file-copy" path="$PROJECT_DIR$/mei_normal.htsvoice" />
-      <element id="file-copy" path="$PROJECT_DIR$/.env" />
     </root>
   </artifact>
 </component>

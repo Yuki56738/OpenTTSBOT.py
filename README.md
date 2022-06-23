@@ -11,3 +11,9 @@ engineer@risaton.net
 ```shell
 sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001  
 ```  
+or  
+```shell
+brew install open-jtalk  
+brew install mecab
+brew install mecab-ipadic
+```

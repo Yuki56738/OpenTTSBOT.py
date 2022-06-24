@@ -176,16 +176,16 @@ public class Main {
         DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
         System.out.println("discord bot built.");
         api.addMessageCreateListener((event) -> {
-            System.out.println("Message received.");
+//            System.out.println("Message received.");
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
             if (!event.getMessageAuthor().isBotUser()) {
-                if (event.isPrivateMessage()) {
-                    System.out.println(String.format("private message received: %s", event.getMessageContent()));
-                }
+//                if (event.isPrivateMessage()) {
+//                    System.out.println(String.format("private message received: %s", event.getMessageContent()));
+//                }
 
-                System.out.println(event.getMessageContent());
+//                System.out.println(event.getMessageContent());
                 if (event.getMessageContent().equalsIgnoreCase(".debug")) {
                     System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
                     Iterator var2 = api.getServers().iterator();

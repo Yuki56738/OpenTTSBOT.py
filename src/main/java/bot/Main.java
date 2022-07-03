@@ -187,7 +187,7 @@ public class Main {
 
 //                System.out.println(event.getMessageContent());
                 if (event.getMessageContent().equalsIgnoreCase(".debug")) {
-                    System.out.println(String.format(".debug hit.\nchannelsForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
+                    System.out.println(String.format(".debug hit.\naudioConnectionForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
                     Iterator var2 = api.getServers().iterator();
 
                     while (var2.hasNext()) {

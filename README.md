@@ -5,23 +5,17 @@ https://discord.com/api/oauth2/authorize?client_id=953590781703254026&permission
 問い合わせは以下のアドレスまで:  
 engineer@risaton.net  
   
-開発者向け:  
-  
-依存関係:  
+開発者向け:
+
+
+ダウンロード:  
 ```shell
-sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001  
-```  
-or  
-```shell
-brew install open-jtalk  
-brew install mecab
-brew install mecab-ipadic
+wget https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord/releases/tag/3.2#:~:text=OpenYomiageBot_3_jar.tgz
 ```
+
 1. 依存関係のインストール
 ```
-brew install open-jtalk  
-brew install mecab
-brew install mecab-ipadic
+sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001  
 ```
 2. トークンを記述
 ```

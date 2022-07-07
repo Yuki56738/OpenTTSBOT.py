@@ -109,7 +109,7 @@ public class Main {
 
 //        String x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
         String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
-        if (IsM1Mac){
+        if (IsM1Mac) {
             x = "/opt/homebrew/lib/mecab/dic/ipadic";
         }
         String m = "./mei_normal.htsvoice";
@@ -120,16 +120,18 @@ public class Main {
         Runtime runtime = Runtime.getRuntime();
         Process p = null;
 
-        try {
-            p = runtime.exec(command);
-        } catch (IOException var12) {
-            System.out.println(var12);
-        }
+//        try {
+//        } catch (IOException var12) {
+//            System.out.println(var12);
+//        }
 
         try {
+            p = runtime.exec(command);
             p.waitFor();
         } catch (InterruptedException var11) {
-            System.out.println(var11);
+            throw new RuntimeException(var11);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         InputStream is = p.getInputStream(); // プロセスの結果を変数に格納する
         BufferedReader br = new BufferedReader(new InputStreamReader(is)); // テキスト読み込みを行えるようにする
@@ -161,7 +163,7 @@ public class Main {
         dotenv = Dotenv.load();
         TOKEN = dotenv.get("DISCORD_TOKEN");
         System.out.println("discord token read with dotenv-java.");
-        if (dotenv.get("M1Mac").equalsIgnoreCase("true")){
+        if (dotenv.get("M1Mac").equalsIgnoreCase("true")) {
             IsM1Mac = true;
         }
 //        }else {

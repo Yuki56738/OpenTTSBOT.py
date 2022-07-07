@@ -25,3 +25,5 @@ hs_err_pid*
 .idea/
 token.txt
 .env
+input.txt
+output.wav

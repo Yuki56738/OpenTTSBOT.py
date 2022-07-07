@@ -25,7 +25,8 @@ brew install mecab-ipadic
 ```
 2. トークンを記述
 ```
-vi .env
+vi .env  
+DISCORD_TOKEN="your-token"
 ```
 
 3. 実行

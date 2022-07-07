@@ -103,7 +103,6 @@ public class Main {
         }
 
 
-//        String x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
         String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
         if (IsM1Mac) {
             x = "/opt/homebrew/lib/mecab/dic/ipadic";
@@ -116,10 +115,6 @@ public class Main {
         Runtime runtime = Runtime.getRuntime();
         Process p = null;
 
-//        try {
-//        } catch (IOException var12) {
-//            System.out.println(var12);
-//        }
 
         try {
             p = runtime.exec(command);
@@ -155,35 +150,22 @@ public class Main {
 
         Dotenv dotenv;
 
-//        if (Files.exists(Paths.get(".env"))){
         dotenv = Dotenv.load();
         TOKEN = dotenv.get("DISCORD_TOKEN");
         System.out.println("discord token read with dotenv-java.");
         if (dotenv.get("M1Mac").equalsIgnoreCase("true")) {
             IsM1Mac = true;
         }
-//        }else {
-//        try {
-//            TOKEN = Files.readString(file);
-//            System.out.println("discord token read.");
-//        } catch (IOException var5) {
-//            throw new RuntimeException(var5);
-//        }
 
 
         DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
         System.out.println("discord bot built.");
         api.addMessageCreateListener((event) -> {
-//            System.out.println("Message received.");
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
             if (!event.getMessageAuthor().isBotUser()) {
-//                if (event.isPrivateMessage()) {
-//                    System.out.println(String.format("private message received: %s", event.getMessageContent()));
-//                }
 
-//                System.out.println(event.getMessageContent());
                 if (event.getMessageContent().equalsIgnoreCase(".debug")) {
                     System.out.println(String.format(".debug hit.\naudioConnectionForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
                     Iterator var2 = api.getServers().iterator();
@@ -218,14 +200,6 @@ public class Main {
                     playAudio(api, "output.wav", audioConnection);
                 }
 
-//                Message message = event.getMessage();
-//                if (message.getMentionedUsers().contains(api.getYourself())) {
-//                    System.out.println("mentiond.");
-//                    TextChannel textChannel1 = event.getChannel();
-//                    event.getMessage().reply(message.getContent());
-//                    if (message.getContent().contains("play")) {
-//                    }
-//                }
 
             }
         });

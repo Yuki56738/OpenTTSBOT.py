@@ -110,7 +110,7 @@ public class Main {
 //        String x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
         String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
         if (IsM1Mac){
-            x = "/opt/homebrew/Cellar/open-jtalk/1.11/dic";
+            x = "/opt/homebrew/lib/mecab/dic/ipadic";
         }
         String m = "./mei_normal.htsvoice";
         String r = "0.7";
@@ -220,7 +220,7 @@ public class Main {
                     playAudio(api, "output.wav", audioConnection);
                 }
 
-                Message message = event.getMessage();
+//                Message message = event.getMessage();
 //                if (message.getMentionedUsers().contains(api.getYourself())) {
 //                    System.out.println("mentiond.");
 //                    TextChannel textChannel1 = event.getChannel();
@@ -231,8 +231,8 @@ public class Main {
 
             }
         });
-        SlashCommand command = (SlashCommand) SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
-        SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave", "切断します。").createGlobal(api).join();
+        SlashCommand command = (SlashCommand) SlashCommand.with("join-test", "VCに接続します。").createGlobal(api).join();
+        SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave-test", "切断します。").createGlobal(api).join();
         api.addSlashCommandCreateListener((event) -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
             Server server;

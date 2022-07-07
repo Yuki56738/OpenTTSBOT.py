@@ -159,7 +159,7 @@ public class Main {
 
 //        if (Files.exists(Paths.get(".env"))){
         dotenv = Dotenv.load();
-        TOKEN = dotenv.get("DISCORD_TOKEN_rel");
+        TOKEN = dotenv.get("DISCORD_TOKEN");
         System.out.println("discord token read with dotenv-java.");
         if (dotenv.get("M1Mac").equalsIgnoreCase("true")){
             IsM1Mac = true;

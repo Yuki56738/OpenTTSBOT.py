@@ -153,9 +153,9 @@ public class Main {
         dotenv = Dotenv.load();
         TOKEN = dotenv.get("DISCORD_TOKEN");
         System.out.println("discord token read with dotenv-java.");
-        if (dotenv.get("M1Mac").equalsIgnoreCase("true")) {
-            IsM1Mac = true;
-        }
+//        if (dotenv.get("M1Mac").equalsIgnoreCase("true")) {
+//            IsM1Mac = true;
+//        }
 
 
         DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
@@ -203,8 +203,8 @@ public class Main {
 
             }
         });
-        SlashCommand command = (SlashCommand) SlashCommand.with("join-test", "VCに接続します。").createGlobal(api).join();
-        SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave-test", "切断します。").createGlobal(api).join();
+        SlashCommand command = (SlashCommand) SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
+        SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave", "切断します。").createGlobal(api).join();
         api.addSlashCommandCreateListener((event) -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
             Server server;

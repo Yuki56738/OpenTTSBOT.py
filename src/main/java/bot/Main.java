@@ -38,7 +38,6 @@ import java.util.regex.Pattern;
 public class Main {
     public static String TOKEN;
 
-    public static boolean IsM1Mac = false;
     public static Map<Server, AudioConnection> audioConnectionForTTS = new HashMap();
     public static Map<Server, TextChannel> textChannelForTTS = new HashMap();
 
@@ -104,9 +103,7 @@ public class Main {
 
 
         String x = "/var/lib/mecab/dic/open-jtalk/naist-jdic";
-        if (IsM1Mac) {
-            x = "/opt/homebrew/lib/mecab/dic/ipadic";
-        }
+
         String m = "./mei_normal.htsvoice";
         String r = "0.7";
         String ow = "output.wav";

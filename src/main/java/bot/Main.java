@@ -187,6 +187,10 @@ public class Main {
                         msgReplaced = "URL省略";
                     } else if (msgReplaced.startsWith("https://")) {
                         msgReplaced = "URL省略";
+                    } else if (msgReplaced.contains("w") || msgReplaced.contains("ｗ")) {
+                        msgReplaced = msgReplaced.replaceAll("w", "わら");
+                        msgReplaced = msgReplaced.replaceAll("ｗ", "わら");
+
                     }
 
                     if (msgReplaced.length() >= 50) {

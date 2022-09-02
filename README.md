@@ -7,10 +7,11 @@ engineer@risaton.net
   
 開発者向け:
 
+※Ubuntu Linuxのみで動作検証しています。
 
 ダウンロード:  
 ```shell
-wget https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord/releases/tag/3.2#:~:text=OpenYomiageBot_3_jar.tgz
+wget https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord/releases/download/3.3/OpenYomiageBot_3_jar.tgz
 ```
 
 1. 依存関係のインストール

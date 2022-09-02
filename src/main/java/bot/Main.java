@@ -183,13 +183,28 @@ public class Main {
                     p.matcher(msg);
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");
                     msgReplaced = msgReplaced.replaceAll("\n", " ");
+
+                    //繰り返すwを省略
+                    int counter = 0;
+                    for (int i = 0; i < msgReplaced.length(); i++){
+                        if(msgReplaced.charAt(i) == 'w' || msgReplaced.charAt(i) == 'W' || msgReplaced.charAt(i) == 'ｗ'){
+                            counter++;
+                        }
+                    }
+                    if (counter >= 5){
+//                        msgReplaced = msgReplaced.replaceAll("w", "省略");
+//                        msgReplaced = msgReplaced.replaceAll("ｗ", "省略");
+//                        msgReplaced = msgReplaced.replaceAll("W", "省略");
+                        msgReplaced = "省略";
+                    }
                     if (msgReplaced.startsWith("http://")) {
                         msgReplaced = "URL省略";
                     } else if (msgReplaced.startsWith("https://")) {
                         msgReplaced = "URL省略";
-                    } else if (msgReplaced.contains("w") || msgReplaced.contains("ｗ")) {
+                    } else if (msgReplaced.contains("w") || msgReplaced.contains("ｗ") || msgReplaced.contains("W")) {
                         msgReplaced = msgReplaced.replaceAll("w", "わら");
                         msgReplaced = msgReplaced.replaceAll("ｗ", "わら");
+                        msgReplaced = msgReplaced.replaceAll("W", "わら");
 
                     }
 

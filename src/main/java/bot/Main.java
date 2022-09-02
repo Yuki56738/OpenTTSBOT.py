@@ -184,6 +184,12 @@ public class Main {
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");
                     msgReplaced = msgReplaced.replaceAll("\n", " ");
 
+
+
+                    //URLを省略
+                    String regex = "\\b(https?|ftp|file|http?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+                    msgReplaced = msgReplaced.replaceAll(regex, "URL省略");
+
                     //繰り返すwを省略
                     int counter = 0;
                     for (int i = 0; i < msgReplaced.length(); i++){
@@ -197,11 +203,12 @@ public class Main {
 //                        msgReplaced = msgReplaced.replaceAll("W", "省略");
                         msgReplaced = "省略";
                     }
-                    if (msgReplaced.startsWith("http://")) {
-                        msgReplaced = "URL省略";
-                    } else if (msgReplaced.startsWith("https://")) {
-                        msgReplaced = "URL省略";
-                    } else if (msgReplaced.contains("w") || msgReplaced.contains("ｗ") || msgReplaced.contains("W")) {
+//                    if (msgReplaced.startsWith("http://")) {
+//                        msgReplaced = "URL省略";
+//                    } else if (msgReplaced.startsWith("https://")) {
+//                        msgReplaced = "URL省略";
+//                    };
+                    if (msgReplaced.contains("w") || msgReplaced.contains("ｗ") || msgReplaced.contains("W")) {
                         msgReplaced = msgReplaced.replaceAll("w", "わら");
                         msgReplaced = msgReplaced.replaceAll("ｗ", "わら");
                         msgReplaced = msgReplaced.replaceAll("W", "わら");
@@ -262,8 +269,8 @@ public class Main {
                     MessageBuilder message = (MessageBuilder) (new MessageBuilder()).setEmbed((new EmbedBuilder()).setTitle("Open読み上げBOTv2").setDescription(greetingMessage).setColor(Color.MAGENTA));
                     message.send(channel);
                 }).exceptionally((throwable) -> {
-                    throwable.printStackTrace();
-                    return null;
+                    throw new RuntimeException(throwable);
+//                    return null;
                 });
                 ((InteractionImmediateResponseBuilder) slashcommandInteraction.createImmediateResponder().setContent("Connecting...")).respond();
             } else if (slashcommandInteraction.getCommandName().equals("leave")) {

@@ -16,7 +16,6 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
@@ -30,9 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Main {
@@ -184,7 +181,12 @@ public class Main {
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");
                     msgReplaced = msgReplaced.replaceAll("\n", " ");
 
-
+                    //wをわらに変換
+                    Pattern p2 = Pattern.compile("w+");
+//                    Matcher matcher = p.matcher(msgReplaced);
+//                    while (matcher.find()){
+//                        System.out.println();
+//                    }
 
                     //URLを省略
                     String regex = "\\b(https?|ftp|file|http?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
@@ -198,10 +200,10 @@ public class Main {
                         }
                     }
                     if (counter >= 5){
-//                        msgReplaced = msgReplaced.replaceAll("w", "省略");
-//                        msgReplaced = msgReplaced.replaceAll("ｗ", "省略");
-//                        msgReplaced = msgReplaced.replaceAll("W", "省略");
-                        msgReplaced = "省略";
+                        msgReplaced = msgReplaced.replaceAll("w+", "わら");
+                        msgReplaced = msgReplaced.replaceAll("ｗ+", "わら");
+                        msgReplaced = msgReplaced.replaceAll("W+", "わら");
+//                        msgReplaced = "省略";
                     }
 //                    if (msgReplaced.startsWith("http://")) {
 //                        msgReplaced = "URL省略";
@@ -304,5 +306,20 @@ public class Main {
                 playAudio(api, "output.wav", audioConnection);
             }
         });
+    }
+    public static String removeDup(String input){
+        char[] chars = input.toCharArray();
+        Set<Character> charSet = new LinkedHashSet<Character>();
+        for (char c : chars) {
+            charSet.add(c);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Character character : charSet) {
+            sb.append(character);
+        }
+        System.out.println(sb.toString());
+
+        return sb.toString();
     }
 }

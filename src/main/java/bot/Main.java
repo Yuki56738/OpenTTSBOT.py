@@ -181,12 +181,6 @@ public class Main {
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");
                     msgReplaced = msgReplaced.replaceAll("\n", " ");
 
-                    //wをわらに変換
-                    Pattern p2 = Pattern.compile("w+");
-//                    Matcher matcher = p.matcher(msgReplaced);
-//                    while (matcher.find()){
-//                        System.out.println();
-//                    }
 
                     //URLを省略
                     String regex = "\\b(https?|ftp|file|http?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";

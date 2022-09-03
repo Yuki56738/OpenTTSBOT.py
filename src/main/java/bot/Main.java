@@ -176,6 +176,9 @@ public class Main {
                 TextChannel textChannel = (TextChannel) textChannelForTTS.get(server);
                 if (event.getChannel().equals(textChannel)) {
                     String msg = event.getMessageContent();
+                    if (event.getMessageAuthor().isBotUser()){
+                        return;
+                    }
                     Pattern p = Pattern.compile("[0-9]+>");
                     p.matcher(msg);
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");

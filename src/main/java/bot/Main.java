@@ -158,7 +158,7 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
-            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...")){
+            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...") || event.getMessageContent().equalsIgnoreCase("Wait...")){
                 return;
             }
             if (!event.getMessageAuthor().isBotUser()) {

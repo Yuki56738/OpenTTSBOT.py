@@ -158,6 +158,9 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
+            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...")){
+                return;
+            }
             if (!event.getMessageAuthor().isBotUser()) {
 
                 if (event.getMessageContent().equalsIgnoreCase(".debug")) {

@@ -303,6 +303,10 @@ public class Main {
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
                 TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
                 createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())));
+//                System.out.println(event.getChannel().getConnectedUsers().stream().count());
+                if (event.getChannel().getConnectedUsers().stream().count() == 1){
+                    audioConnection.close();
+                }
                 playAudio(api, "output.wav", audioConnection);
             }
         });

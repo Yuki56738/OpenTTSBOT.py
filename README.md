@@ -11,7 +11,7 @@ engineer@risaton.net
 
 ダウンロード:  
 ```shell
-wget https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord/releases/download/3.3/OpenYomiageBot_3_jar.tgz
+wget https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord/releases/download/3.4/OpenYomiageBot_3_jar.tgz
 ```
 
 1. 依存関係のインストール

@@ -71,7 +71,7 @@ public class Main {
         });
     }
 
-    public static void createWavFile(String inputText) {
+    public static void createWavFile(String inputText, String outWavFile) {
         Path input_file = Paths.get("input.txt");
         if (Files.exists(input_file, new LinkOption[0])) {
             try {
@@ -103,7 +103,8 @@ public class Main {
 
         String m = "./mei_normal.htsvoice";
         String r = "0.7";
-        String ow = "output.wav";
+//        String ow = "output.wav";
+        String ow = outWavFile;
         String command = String.format("open_jtalk -x %s -m %s -r %s -ow %s %s", x, m, r, ow, input_file);
         System.out.println(command);
         Runtime runtime = Runtime.getRuntime();
@@ -139,8 +140,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Path file;
-        file = Paths.get("token.txt");
+//        Path file;
+//        file = Paths.get("token.txt");
 
         Dotenv dotenv;
 
@@ -158,7 +159,7 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
-            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...") || event.getMessageContent().equalsIgnoreCase("Wait...")){
+            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...") || event.getMessageContent().equalsIgnoreCase("Stopping ...")){
                 return;
             }
             if (!event.getMessageAuthor().isBotUser()) {
@@ -182,8 +183,8 @@ public class Main {
                     if (event.getMessageAuthor().isBotUser()){
                         return;
                     }
-                    Pattern p = Pattern.compile("[0-9]+>");
-                    p.matcher(msg);
+//                    Pattern p = Pattern.compile("[0-9]+>");
+//                    p.matcher(msg);
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");
                     msgReplaced = msgReplaced.replaceAll("\n", " ");
 
@@ -221,7 +222,7 @@ public class Main {
                         return;
                     }
 
-                    createWavFile(msgReplaced);
+                    createWavFile(msgReplaced, "output.wav");
                     playAudio(api, "output.wav", audioConnection);
                 }
 
@@ -255,7 +256,7 @@ public class Main {
                 serverVoiceChannel.connect().thenAccept((audioConnection) -> {
                     audioConnectionForTTS.put(server, audioConnection);
                     textChannelForTTS.put(server, channel);
-                    createWavFile("オープン読み上げボットです！");
+                    createWavFile("オープン読み上げボットです！", "output.wav");
                     playAudio(api, "output.wav", audioConnection);
                     channel.sendMessage("Connected.");
                     System.out.println(String.format("on server: %s", serverVoiceChannel));
@@ -294,7 +295,7 @@ public class Main {
                 TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
                 Server server = event.getServer();
                 String member = event.getUser().getDisplayName(event.getServer());
-                createWavFile(String.format("%sが参加したよ。", member));
+                createWavFile(String.format("%sが参加したよ。", member), "output.wav");
                 playAudio(api, "output.wav", audioConnection);
             }
         });
@@ -302,7 +303,7 @@ public class Main {
             if (!event.getUser().isBot()) {
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
                 TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
-                createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())));
+                createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())), "output.wav");
                 if (event.getChannel().getConnectedUsers().stream().count() == 1){
                     audioConnection.close();
                     audioConnectionForTTS.remove(event.getServer());

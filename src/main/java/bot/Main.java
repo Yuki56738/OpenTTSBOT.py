@@ -153,7 +153,10 @@ public class Main {
 //        }
 
 
-        DiscordApi api = new DiscordApiBuilder().setToken(TOKEN).login().join();
+        DiscordApi api = new DiscordApiBuilder()
+                .setToken(TOKEN)
+                .setAllIntents()
+                .login().join();
         System.out.println("discord bot built.");
         api.addMessageCreateListener((event) -> {
             if (event.getMessageAuthor().isBotUser()) {
@@ -162,9 +165,9 @@ public class Main {
             if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...") || event.getMessageContent().equalsIgnoreCase("Stopping ...")){
                 return;
             }
-            if (!event.getMessageAuthor().isBotUser()) {
+//            if (!event.getMessageAuthor().isBotUser()) {
 
-                if (event.getMessageContent().equalsIgnoreCase(".debug")) {
+                if (event.getMessageContent().contains(".debug")) {
                     System.out.println(String.format(".debug hit.\naudioConnectionForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
                     Iterator var2 = api.getServers().iterator();
 
@@ -172,6 +175,7 @@ public class Main {
                         Server x = (Server) var2.next();
                         System.out.println(String.format("Now connected to: %s", x));
                     }
+                    System.out.println(event.getMessageContent());
                 }
 
                 Server server = (Server) event.getServer().get();
@@ -180,9 +184,9 @@ public class Main {
                 TextChannel textChannel = (TextChannel) textChannelForTTS.get(server);
                 if (event.getChannel().equals(textChannel)) {
                     String msg = event.getMessageContent();
-                    if (event.getMessageAuthor().isBotUser()){
-                        return;
-                    }
+//                    if (event.getMessageAuthor().isBotUser()){
+//                        return;
+//                    }
 //                    Pattern p = Pattern.compile("[0-9]+>");
 //                    p.matcher(msg);
                     String msgReplaced = msg.replaceAll("[0-9]+>", "");
@@ -227,9 +231,10 @@ public class Main {
                 }
 
 
-            }
+//            }
         });
         SlashCommand command = (SlashCommand) SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
+//        SlashCommand commandJoin2 = SlashCommand.with("join", "VCに接続します。").createForServer(api.getServerById("711671415455219813").get()).join();
         SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave", "切断します。").createGlobal(api).join();
         api.addSlashCommandCreateListener((event) -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
@@ -302,7 +307,8 @@ public class Main {
         api.addServerVoiceChannelMemberLeaveListener((event) -> {
             if (!event.getUser().isBot()) {
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
-                TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
+                TextChannel textChannel = (TextChannel) textChannelForTTS.get(event.getServer());
+
                 createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())), "output.wav");
                 if (event.getChannel().getConnectedUsers().stream().count() == 1){
                     audioConnection.close();

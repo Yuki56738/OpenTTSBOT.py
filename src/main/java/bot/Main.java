@@ -140,17 +140,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        Path file;
-//        file = Paths.get("token.txt");
 
         Dotenv dotenv;
 
         dotenv = Dotenv.load();
         TOKEN = dotenv.get("DISCORD_TOKEN");
         System.out.println("discord token read with dotenv-java.");
-//        if (dotenv.get("M1Mac").equalsIgnoreCase("true")) {
-//            IsM1Mac = true;
-//        }
 
 
         DiscordApi api = new DiscordApiBuilder()
@@ -162,79 +157,65 @@ public class Main {
             if (event.getMessageAuthor().isBotUser()) {
                 return;
             }
-            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...") || event.getMessageContent().equalsIgnoreCase("Stopping ...")){
+            if (event.getMessageContent().equalsIgnoreCase("Connecting...") || event.getMessageContent().equalsIgnoreCase("Disconnecting...") || event.getMessageContent().equalsIgnoreCase("Playing...") || event.getMessageContent().equalsIgnoreCase("Stopping ...")) {
                 return;
             }
-//            if (!event.getMessageAuthor().isBotUser()) {
 
-                if (event.getMessageContent().contains(".debug")) {
-                    System.out.println(String.format(".debug hit.\naudioConnectionForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
-                    Iterator var2 = api.getServers().iterator();
+            if (event.getMessageContent().contains(".debug")) {
+                System.out.println(String.format(".debug hit.\naudioConnectionForTTS: %s\ntextChannelsForTTS: %s", audioConnectionForTTS, textChannelForTTS));
+                Iterator var2 = api.getServers().iterator();
 
-                    while (var2.hasNext()) {
-                        Server x = (Server) var2.next();
-                        System.out.println(String.format("Now connected to: %s", x));
+                while (var2.hasNext()) {
+                    Server x = (Server) var2.next();
+                    System.out.println(String.format("Now connected to: %s", x));
+                }
+                System.out.println(event.getMessageContent());
+            }
+
+            Server server = (Server) event.getServer().get();
+            System.out.println(String.format("in addMessageCreateListener: %s", server));
+            AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(server);
+            TextChannel textChannel = (TextChannel) textChannelForTTS.get(server);
+            if (event.getChannel().equals(textChannel)) {
+                String msg = event.getMessageContent();
+                String msgReplaced = msg.replaceAll("[0-9]+>", "");
+                msgReplaced = msgReplaced.replaceAll("\n", " ");
+
+
+                //URLを省略
+                String regex = "\\b(https?|ftp|file|http?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+                msgReplaced = msgReplaced.replaceAll(regex, "URL省略");
+
+                //繰り返すwを省略
+                int counter = 0;
+                for (int i = 0; i < msgReplaced.length(); i++) {
+                    if (msgReplaced.charAt(i) == 'w' || msgReplaced.charAt(i) == 'W' || msgReplaced.charAt(i) == 'ｗ') {
+                        counter++;
                     }
-                    System.out.println(event.getMessageContent());
+                }
+                if (counter >= 5) {
+                    msgReplaced = msgReplaced.replaceAll("w+", "わら");
+                    msgReplaced = msgReplaced.replaceAll("ｗ+", "わら");
+                    msgReplaced = msgReplaced.replaceAll("W+", "わら");
+                }
+                if (msgReplaced.contains("w") || msgReplaced.contains("ｗ") || msgReplaced.contains("W")) {
+                    msgReplaced = msgReplaced.replaceAll("w", "わら");
+                    msgReplaced = msgReplaced.replaceAll("ｗ", "わら");
+                    msgReplaced = msgReplaced.replaceAll("W", "わら");
+
                 }
 
-                Server server = (Server) event.getServer().get();
-                System.out.println(String.format("in addMessageCreateListener: %s", server));
-                AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(server);
-                TextChannel textChannel = (TextChannel) textChannelForTTS.get(server);
-                if (event.getChannel().equals(textChannel)) {
-                    String msg = event.getMessageContent();
-//                    if (event.getMessageAuthor().isBotUser()){
-//                        return;
-//                    }
-//                    Pattern p = Pattern.compile("[0-9]+>");
-//                    p.matcher(msg);
-                    String msgReplaced = msg.replaceAll("[0-9]+>", "");
-                    msgReplaced = msgReplaced.replaceAll("\n", " ");
-
-
-                    //URLを省略
-                    String regex = "\\b(https?|ftp|file|http?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-                    msgReplaced = msgReplaced.replaceAll(regex, "URL省略");
-
-                    //繰り返すwを省略
-                    int counter = 0;
-                    for (int i = 0; i < msgReplaced.length(); i++){
-                        if(msgReplaced.charAt(i) == 'w' || msgReplaced.charAt(i) == 'W' || msgReplaced.charAt(i) == 'ｗ'){
-                            counter++;
-                        }
-                    }
-                    if (counter >= 5){
-                        msgReplaced = msgReplaced.replaceAll("w+", "わら");
-                        msgReplaced = msgReplaced.replaceAll("ｗ+", "わら");
-                        msgReplaced = msgReplaced.replaceAll("W+", "わら");
-//                        msgReplaced = "省略";
-                    }
-//                    if (msgReplaced.startsWith("http://")) {
-//                        msgReplaced = "URL省略";
-//                    } else if (msgReplaced.startsWith("https://")) {
-//                        msgReplaced = "URL省略";
-//                    };
-                    if (msgReplaced.contains("w") || msgReplaced.contains("ｗ") || msgReplaced.contains("W")) {
-                        msgReplaced = msgReplaced.replaceAll("w", "わら");
-                        msgReplaced = msgReplaced.replaceAll("ｗ", "わら");
-                        msgReplaced = msgReplaced.replaceAll("W", "わら");
-
-                    }
-
-                    if (msgReplaced.length() >= 50) {
-                        return;
-                    }
-
-                    createWavFile(msgReplaced, "output.wav");
-                    playAudio(api, "output.wav", audioConnection);
+                if (msgReplaced.length() >= 50) {
+                    return;
                 }
 
+                createWavFile(msgReplaced, "output.wav");
+                playAudio(api, "output.wav", audioConnection);
+            }
 
-//            }
+
         });
         SlashCommand command = (SlashCommand) SlashCommand.with("join", "VCに接続します。").createGlobal(api).join();
-//        SlashCommand commandJoin2 = SlashCommand.with("join", "VCに接続します。").createForServer(api.getServerById("711671415455219813").get()).join();
         SlashCommand commandLeave = (SlashCommand) SlashCommand.with("leave", "切断します。").createGlobal(api).join();
         api.addSlashCommandCreateListener((event) -> {
             SlashCommandInteraction slashcommandInteraction = event.getSlashCommandInteraction();
@@ -250,7 +231,6 @@ public class Main {
                     serverVoiceChannel = (ServerVoiceChannel) slashcommandInteraction.getUser().getConnectedVoiceChannel(server).get();
 
                 } catch (Exception e) {
-//                    System.out.println(e.getMessage());
                     slashcommandInteraction.createImmediateResponder()
                             .setContent("どこのボイスチャンネルにも参加していません！")
                             .respond();
@@ -282,7 +262,6 @@ public class Main {
                     message.send(channel);
                 }).exceptionally((throwable) -> {
                     throw new RuntimeException(throwable);
-//                    return null;
                 });
                 ((InteractionImmediateResponseBuilder) slashcommandInteraction.createImmediateResponder().setContent("Connecting...")).respond();
             } else if (slashcommandInteraction.getCommandName().equals("leave")) {
@@ -314,7 +293,7 @@ public class Main {
                 TextChannel textChannel = (TextChannel) textChannelForTTS.get(event.getServer());
 
                 createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())), "output.wav");
-                if (event.getChannel().getConnectedUsers().stream().count() == 1){
+                if (event.getChannel().getConnectedUsers().stream().count() == 1) {
                     audioConnection.close();
                     audioConnectionForTTS.remove(event.getServer());
                     textChannelForTTS.remove(event.getServer());
@@ -323,7 +302,8 @@ public class Main {
             }
         });
     }
-    public static String removeDup(String input){
+
+    public static String removeDup(String input) {
         char[] chars = input.toCharArray();
         Set<Character> charSet = new LinkedHashSet<Character>();
         for (char c : chars) {

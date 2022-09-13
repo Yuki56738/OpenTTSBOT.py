@@ -274,7 +274,11 @@ public class Main {
                         throw new RuntimeException(var8);
                     }
 
-                    MessageBuilder message = (MessageBuilder) (new MessageBuilder()).setEmbed((new EmbedBuilder()).setTitle("Open読み上げBOTv2").setDescription(greetingMessage).setColor(Color.MAGENTA));
+                    MessageBuilder message = (MessageBuilder) (new MessageBuilder())
+                            .setEmbed((new EmbedBuilder())
+                                    .setTitle("Open読み上げBOTv2")
+                                    .setDescription(greetingMessage)
+                                    .setColor(Color.MAGENTA));
                     message.send(channel);
                 }).exceptionally((throwable) -> {
                     throw new RuntimeException(throwable);

@@ -54,10 +54,8 @@ public class Main {
             }
 
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                Iterator var2 = audioPlaylist.getTracks().iterator();
 
-                while (var2.hasNext()) {
-                    AudioTrack track = (AudioTrack) var2.next();
+                for (AudioTrack track : audioPlaylist.getTracks()) {
                     player.playTrack(track);
                 }
 
@@ -73,7 +71,7 @@ public class Main {
 
     public static void createWavFile(String inputText, String outWavFile) {
         Path input_file = Paths.get("input.txt");
-        if (Files.exists(input_file, new LinkOption[0])) {
+        if (Files.exists(input_file)) {
             try {
                 Files.delete(input_file);
                 Files.createFile(input_file);
@@ -137,6 +135,41 @@ public class Main {
         }
 
     }
+
+    public static String omitMessage(String msg) {
+        String msgReplaced = msg.replaceAll("[0-9]+>", "");
+        msgReplaced = msgReplaced.replaceAll("\n", " ");
+
+
+        //URLを省略
+        String regex = "\\b(https?|ftp|file|http?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+        msgReplaced = msgReplaced.replaceAll(regex, "URL省略");
+
+        //繰り返すwを省略
+        int counter = 0;
+        for (int i = 0; i < msgReplaced.length(); i++) {
+            if (msgReplaced.charAt(i) == 'w' || msgReplaced.charAt(i) == 'W' || msgReplaced.charAt(i) == 'ｗ') {
+                counter++;
+            }
+        }
+        if (counter >= 5) {
+            msgReplaced = msgReplaced.replaceAll("w+", "わら");
+            msgReplaced = msgReplaced.replaceAll("ｗ+", "わら");
+            msgReplaced = msgReplaced.replaceAll("W+", "わら");
+        }
+        if (msgReplaced.contains("w") || msgReplaced.contains("ｗ") || msgReplaced.contains("W")) {
+            msgReplaced = msgReplaced.replaceAll("w", "わら");
+            msgReplaced = msgReplaced.replaceAll("ｗ", "わら");
+            msgReplaced = msgReplaced.replaceAll("W", "わら");
+
+        }
+
+        if (msgReplaced.length() >= 50) {
+            return "";
+        }
+        return msgReplaced;
+    }
+
 
     public static void main(String[] args) {
 
@@ -278,28 +311,31 @@ public class Main {
             System.out.println(String.format("Joined to bot server: %s", event.getServer()));
         });
         api.addServerVoiceChannelMemberJoinListener((event) -> {
-            if (!event.getUser().isBot()) {
-                AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
-                TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
-                Server server = event.getServer();
-                String member = event.getUser().getDisplayName(event.getServer());
-                createWavFile(String.format("%sが参加したよ。", member), "output.wav");
-                playAudio(api, "output.wav", audioConnection);
-            }
+//            if (!event.getUser().isBot()) {
+//                AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
+//                TextChannel var10000 = (TextChannel) textChannelForTTS.get(event.getServer());
+//
+//
+//                Server server = event.getServer();
+//                String member = event.getUser().getDisplayName(event.getServer());
+//                createWavFile(omitMessage(String.format("%sが参加したよ。", member)), "output.wav");
+//                playAudio(api, "output.wav", audioConnection);
+//            }
         });
         api.addServerVoiceChannelMemberLeaveListener((event) -> {
-            if (!event.getUser().isBot()) {
+//            if (!event.getUser().isBot()) {
                 AudioConnection audioConnection = (AudioConnection) audioConnectionForTTS.get(event.getServer());
                 TextChannel textChannel = (TextChannel) textChannelForTTS.get(event.getServer());
-
-                createWavFile(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer())), "output.wav");
+//
+//
+//                createWavFile(omitMessage(String.format("%sが退出したよ。", event.getUser().getDisplayName(event.getServer()))), "output.wav");
                 if (event.getChannel().getConnectedUsers().stream().count() == 1) {
                     audioConnection.close();
                     audioConnectionForTTS.remove(event.getServer());
                     textChannelForTTS.remove(event.getServer());
                 }
-                playAudio(api, "output.wav", audioConnection);
-            }
+//                playAudio(api, "output.wav", audioConnection);
+
         });
     }
 

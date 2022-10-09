@@ -11,12 +11,12 @@ engineer@risaton.net
 
 ダウンロード:  
 ```shell
-wget https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord/releases/download/3.4/OpenYomiageBot_3_jar.tgz
+git clone https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord.git
 ```
 
 1. 依存関係のインストール
 ```
-sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001  
+sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001 ffmpeg 
 ```
 2. トークンを記述
 ```
@@ -26,5 +26,5 @@ DISCORD_TOKEN="your-token"
 
 3. 実行
 ```shell
-java -jar OpenYomiageBot-3.jar
+python3 main.py
 ```

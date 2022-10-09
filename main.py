@@ -1,8 +1,12 @@
 import re
-
-import discord
 import sys
+import os
+from dotenv import load_dotenv
+import discord
 from voice_generator import create_WAV
+
+load_dotenv()
+TOKEN = os.environ.get("DISCORD_TOKEN")
 
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
@@ -50,33 +54,34 @@ async def leave(ctx):
     except:
         await ctx.respond("どこのVCにも参加していません!")
     read_channels.pop(ctx.author.guild.id)
+
+
 @bot.event
 async def on_message(message):
-
     # for x in read_channels:
-        if read_channels.get(message.author.guild.id) == message.channel.id:
-            msg = message.content
-            # URLを読み上げない
-            if message.content.startswith("http://") or message.content.startswith("https://"):
-                msg = "URL省略"
-            # 50文字までしか読み上げない
-            if len(message.content) <= 50:
-                # メンションを読み上げない
-                pattern = r'<@!'
-                text = re.sub(pattern, '', msg)  # 置換処理
-                pattern = r'[0-9]+>'
-                # return re.sub(pattern,'',msg) # 置換処理
-                text_alt = re.sub(pattern, '', msg)
-                text_alt = re.sub("w+", "わら", text_alt)
-                text_alt = re.sub("W+", "わら", text_alt)
-                text_alt = re.sub("ｗ+", "わら", text_alt)
-                # WAVファイルを作成
-                create_WAV(text_alt)
-                # WAVファイルをDiscordにインプット
-                source = discord.FFmpegPCMAudio("output.wav")
-                # 読み上げる
-                # if yom_channel == message.channel.id:
-                message.guild.voice_client.play(source)
+    if read_channels.get(message.author.guild.id) == message.channel.id:
+        msg = message.content
+        # URLを読み上げない
+        if message.content.startswith("http://") or message.content.startswith("https://"):
+            msg = "URL省略"
+        # 50文字までしか読み上げない
+        if len(message.content) <= 50:
+            # メンションを読み上げない
+            pattern = r'<@!'
+            text = re.sub(pattern, '', msg)  # 置換処理
+            pattern = r'[0-9]+>'
+            # return re.sub(pattern,'',msg) # 置換処理
+            text_alt = re.sub(pattern, '', msg)
+            text_alt = re.sub("w+", "わら", text_alt)
+            text_alt = re.sub("W+", "わら", text_alt)
+            text_alt = re.sub("ｗ+", "わら", text_alt)
+            # WAVファイルを作成
+            create_WAV(text_alt)
+            # WAVファイルをDiscordにインプット
+            source = discord.FFmpegPCMAudio("output.wav")
+            # 読み上げる
+            # if yom_channel == message.channel.id:
+            message.guild.voice_client.play(source)
 
 
 @bot.event
@@ -88,6 +93,4 @@ async def on_voice_state_update(member, before, after):
         read_channels.pop(member.guild.id)
 
 
-
-
-bot.run(sys.argv[1])
+bot.run(TOKEN)

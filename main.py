@@ -59,6 +59,10 @@ async def leave(ctx):
 @bot.event
 async def on_message(message):
     # for x in read_channels:
+    if message.content.startswith(".debug"):
+        print(read_channels)
+        for x in bot.guilds:
+            print(x)
     if read_channels.get(message.author.guild.id) == message.channel.id:
         msg = message.content
         # URLを読み上げない

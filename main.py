@@ -79,6 +79,7 @@ async def on_message(message):
             text_alt = re.sub("w+", "わら", text_alt)
             text_alt = re.sub("W+", "わら", text_alt)
             text_alt = re.sub("ｗ+", "わら", text_alt)
+            text_alt = re.sub("\n", "", text_alt)
             # WAVファイルを作成
             create_WAV(text_alt)
             # WAVファイルをDiscordにインプット

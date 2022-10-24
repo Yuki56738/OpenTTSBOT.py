@@ -3,6 +3,7 @@ import sys
 import os
 from dotenv import load_dotenv
 import discord
+from discord import *
 from voice_generator import create_WAV
 
 load_dotenv()
@@ -19,8 +20,8 @@ async def on_ready():
     print(f"Logged in as: {bot.user}")
 
 
-@bot.slash_command()
-async def join(ctx):
+@bot.slash_command(name="join", description="VCに接続.")
+async def join(ctx: ApplicationContext):
     try:
         await ctx.author.voice.channel.connect()
     except:
@@ -45,9 +46,8 @@ async def join(ctx):
 
     print(read_channels)
 
-
-@bot.slash_command()
-async def leave(ctx):
+@bot.slash_command(name="leave", description="VCから切断.")
+async def leave(ctx: ApplicationContext):
     try:
         await ctx.voice_client.disconnect()
         await ctx.respond("Disconnecting...")
@@ -57,8 +57,7 @@ async def leave(ctx):
 
 
 @bot.event
-async def on_message(message):
-    # for x in read_channels:
+async def on_message(message: Message):
     if message.content.startswith(".debug"):
         print(read_channels)
         for x in bot.guilds:
@@ -90,12 +89,14 @@ async def on_message(message):
 
 
 @bot.event
-async def on_voice_state_update(member, before, after):
-    try:
-        member.voice.channel.members
-    except:
-        await  member.guild.voice_client.disconnect()
-        read_channels.pop(member.guild.id)
+async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
+    if len(before.channel.members) == 1:
+        await member.guild.voice_client.disconnect()
+    # try:
+    #     member.voice.channel.members
+    # except:
+    #     await member.guild.voice_client.disconnect()
+    #     read_channels.pop(member.guild.id)
 
 
 bot.run(TOKEN)

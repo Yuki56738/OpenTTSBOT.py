@@ -25,8 +25,9 @@ async def join(ctx: ApplicationContext):
     try:
         await ctx.author.voice.channel.connect()
     except:
-        await ctx.respond("どこのVCにも参加していません!")
-        return
+        # await ctx.respond("どこのVCにも参加していません!")
+        # return
+        pass
     await ctx.respond("Connecting...")
     # read_channels.pop(ctx.author.guild.id, ctx.channel_id)
     read_channels[ctx.author.guild.id] = ctx.channel_id
@@ -79,6 +80,7 @@ async def on_message(message: Message):
             text_alt = re.sub("W+", "わら", text_alt)
             text_alt = re.sub("ｗ+", "わら", text_alt)
             text_alt = re.sub("\n", "", text_alt)
+
             # WAVファイルを作成
             create_WAV(text_alt)
             # WAVファイルをDiscordにインプット
@@ -90,13 +92,21 @@ async def on_message(message: Message):
 
 @bot.event
 async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
-    if len(before.channel.members) == 1:
-        await member.guild.voice_client.disconnect()
-    # try:
-    #     member.voice.channel.members
-    # except:
-    #     await member.guild.voice_client.disconnect()
-    #     read_channels.pop(member.guild.id)
+    if read_channels[member.guild.id] is not None:
+        if after.channel is None:
+            if len(before.channel.members) == 1:
+                await member.guild.voice_client.disconnect()
+                read_channels.pop(member.guild.id)
+        else:
+            if before.channel.id != after.channel.id:
+                if len(before.channel.members) == 1:
+                    await member.guild.voice_client.disconnect()
+                    read_channels.pop(member.guild.id)
+        # try:
+        #     member.voice.channel.members
+        # except:
+        #     await member.guild.voice_client.disconnect()
+        #     read_channels.pop(member.guild.id)
 
 
 bot.run(TOKEN)

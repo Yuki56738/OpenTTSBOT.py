@@ -49,11 +49,8 @@ async def join(ctx: ApplicationContext):
 
 @bot.slash_command(name="leave", description="VCから切断.")
 async def leave(ctx: ApplicationContext):
-    try:
-        await ctx.voice_client.disconnect()
-        await ctx.respond("Disconnecting...")
-    except:
-        await ctx.respond("どこのVCにも参加していません!")
+    await ctx.voice_client.disconnect()
+    await ctx.respond("Disconnecting...")
     read_channels.pop(ctx.author.guild.id)
 
 

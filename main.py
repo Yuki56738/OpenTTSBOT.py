@@ -33,10 +33,10 @@ async def join(ctx: ApplicationContext):
     read_channels[ctx.author.guild.id] = ctx.channel_id
     with open("greeting.txt", "r") as f:
         greeting = f.read()
-    embed_msg = discord.Embed(title="Open読み上げBOTv3", colour=discord.Colour.magenta(), description=greeting)
+    embed_msg = discord.Embed(title="Open読み上げBOTv3.1", colour=discord.Colour.magenta(), description=greeting)
     await ctx.channel.send(embed=embed_msg)
 
-    text = "オープン読み上げボットです！"
+    text = "読み上げです！"
     # WAVファイルを作成
     create_WAV(text)
     # WAVファイルをDiscordにインプット

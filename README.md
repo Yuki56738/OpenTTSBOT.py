@@ -3,7 +3,7 @@
 https://discord.com/api/oauth2/authorize?client_id=953590781703254026&permissions=3152896&scope=bot%20applications.commands  
 
 問い合わせは以下のアドレスまで:  
-engineer@risaton.net  
+yomi@risaton.net  
   
 開発者向け:
 

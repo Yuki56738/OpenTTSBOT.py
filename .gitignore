@@ -2,4 +2,5 @@
 .env
 input.txt
 output.wav
+out/
 

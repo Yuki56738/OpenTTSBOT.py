@@ -1,9 +1,12 @@
 import subprocess
 
 
-def create_WAV(inputText):
+def create_WAV(inputText, inFile):
     # message.contentをテキストファイルに書き込み
-    input_file = 'input.txt'
+    # input_file = 'input.txt'
+    if inFile is None:
+        input_file = 'input.txt'
+    input_file = inFile
 
     # 読み上げる文章をファイルに書き出し
     with open(input_file, 'w') as file:

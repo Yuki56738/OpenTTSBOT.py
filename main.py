@@ -95,7 +95,7 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
                 await member.guild.voice_client.disconnect()
                 read_channels.pop(member.guild.id)
         else:
-            if before.channel.id != after.channel.id:
+            if after.channel.id != before.channel.id:
                 if len(before.channel.members) == 1:
                     await member.guild.voice_client.disconnect()
                     read_channels.pop(member.guild.id)

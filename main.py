@@ -47,6 +47,7 @@ async def join(ctx: ApplicationContext):
 
     print(read_channels)
 
+
 @bot.slash_command(name="leave", description="VCから切断.")
 async def leave(ctx: ApplicationContext):
     await ctx.voice_client.disconnect()
@@ -89,21 +90,25 @@ async def on_message(message: Message):
 
 @bot.event
 async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
-    if read_channels[member.guild.id] is not None:
-        if after.channel is None:
+    try:
+        read_channels[member.guild.id]
+    except:
+        return
+    # if read_channels[member.guild.id] is not None:
+    if after.channel is None:
+        if len(before.channel.members) == 1:
+            await member.guild.voice_client.disconnect()
+            read_channels.pop(member.guild.id)
+    else:
+        if after.channel.id != before.channel.id:
             if len(before.channel.members) == 1:
                 await member.guild.voice_client.disconnect()
                 read_channels.pop(member.guild.id)
-        else:
-            if after.channel.id != before.channel.id:
-                if len(before.channel.members) == 1:
-                    await member.guild.voice_client.disconnect()
-                    read_channels.pop(member.guild.id)
-        # try:
-        #     member.voice.channel.members
-        # except:
-        #     await member.guild.voice_client.disconnect()
-        #     read_channels.pop(member.guild.id)
+    # try:
+    #     member.voice.channel.members
+    # except:
+    #     await member.guild.voice_client.disconnect()
+    #     read_channels.pop(member.guild.id)
 
 
 bot.run(TOKEN)

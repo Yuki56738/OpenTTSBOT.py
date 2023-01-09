@@ -85,7 +85,8 @@ async def on_message(message: Message):
             source = discord.FFmpegPCMAudio("output.wav")
             # 読み上げる
             # if yom_channel == message.channel.id:
-            message.guild.voice_client.play(source)
+            # message.guild.voice_client.play(source)
+            message.author.guild.voice_client.play(source)
 
 
 @bot.event

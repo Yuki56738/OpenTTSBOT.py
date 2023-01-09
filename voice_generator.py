@@ -1,21 +1,25 @@
 import subprocess
+import sys
 
 
-def create_WAV(inputText, inFile):
+def create_WAV(inputText):
     # message.contentをテキストファイルに書き込み
     # input_file = 'input.txt'
-    if inFile is None:
-        input_file = 'input.txt'
-    input_file = inFile
+    # if inFile is None:
+    input_file = 'input.txt'
+    # input_file = inFile
 
     # 読み上げる文章をファイルに書き出し
     with open(input_file, 'w') as file:
         file.write(inputText)
     # open_jtalkのコマンドの用意
-    command = '/usr/bin/open_jtalk -x {x} -m {m} -r {r} -ow {ow} {input_file}'
+    # command = '/usr/bin/open_jtalk -x {x} -m {m} -r {r} -ow {ow} {input_file}'
+    command = 'open_jtalk -x {x} -m {m} -r {r} -ow {ow} {input_file}'
+
 
     # 辞書のPath
     x = '/var/lib/mecab/dic/open-jtalk/naist-jdic'
+    # x = '/opt/local/lib/mecab/dic/naist-jdic-eucjp'
 
     # ボイスファイルのPath
     # m = '/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice'

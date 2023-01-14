@@ -61,7 +61,7 @@ async def on_message(message: Message):
         print(read_channels)
         for x in bot.guilds:
             print(x)
-    if read_channels.get(message.guild.id) == message.channel.id:
+    if read_channels.get(message.author.guild.id) == message.channel.id:
         msg = message.content
         # URLを読み上げない
         if message.content.startswith("http://") or message.content.startswith("https://"):
@@ -85,8 +85,7 @@ async def on_message(message: Message):
             source = discord.FFmpegPCMAudio("output.wav")
             # 読み上げる
             # if yom_channel == message.channel.id:
-            # message.guild.voice_client.play(source)
-            message.author.guild.voice_client.play(source)
+            message.guild.voice_client.play(source)
 
 
 @bot.event

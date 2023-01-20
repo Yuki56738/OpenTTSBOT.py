@@ -20,6 +20,7 @@ def create_WAV(inputText):
     # 辞書のPath
     # x = '/var/lib/mecab/dic/open-jtalk/naist-jdic'
     # x = '/opt/homebrew/lib/mecab/dic/ipadic'
+    # x = '/usr/local/lib/mecab/dic/ipadic'
     x = '/usr/local/lib/mecab/dic/ipadic'
 
     # ボイスファイルのPath

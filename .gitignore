@@ -3,4 +3,5 @@
 input.txt
 output.wav
 out/
-
+.env*
+venv/

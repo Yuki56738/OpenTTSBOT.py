@@ -18,10 +18,10 @@ def create_WAV(inputText):
 
 
     # 辞書のPath
-    # x = '/var/lib/mecab/dic/open-jtalk/naist-jdic'
+    x = '/var/lib/mecab/dic/open-jtalk/naist-jdic'
     # x = '/opt/homebrew/lib/mecab/dic/ipadic'
     # x = '/usr/local/lib/mecab/dic/ipadic'
-    x = '/usr/local/lib/mecab/dic/ipadic'
+    # x = '/usr/local/lib/mecab/dic/ipadic'
 
     # ボイスファイルのPath
     # m = '/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice'
@@ -35,7 +35,7 @@ def create_WAV(inputText):
 
     # 実行コマンドに変数を代入
     args = {'x': x, 'm': m, 'r': r, 'ow': ow, 'input_file': input_file}
-
+ 
     # コマンド実行の用意
     cmd = command.format(**args)
     cmd2 = cmd.split(" ")

@@ -35,7 +35,7 @@ def create_WAV(inputText):
 
     # 実行コマンドに変数を代入
     args = {'x': x, 'm': m, 'r': r, 'ow': ow, 'input_file': input_file}
-
+ 
     # コマンド実行の用意
     cmd = command.format(**args)
     cmd2 = cmd.split(" ")

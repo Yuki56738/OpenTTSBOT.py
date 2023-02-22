@@ -1,18 +1,24 @@
+import functools
 import re
 import sys
 import os
+import wave
+
 from dotenv import load_dotenv
 import discord
 from discord import *
 from voice_generator import create_WAV
 
-load_dotenv()
+# load_dotenv()
+load_dotenv('.envDev')
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
 
 read_channels = {}
+q = asyncio.Queue()
+# loop = asyncio.new_event_loop()
 
 
 @bot.event
@@ -46,6 +52,10 @@ async def join(ctx: ApplicationContext):
     ctx.voice_client.play(source)
 
     print(read_channels)
+    vc = ctx.voice_client
+
+    loop = asyncio.get_event_loop()
+    loop.create_task(play(vc, loop))
 
 
 @bot.slash_command(name="leave", description="VCから切断.")
@@ -61,6 +71,8 @@ async def on_message(message: Message):
         print(read_channels)
         for x in bot.guilds:
             print(x)
+    if message.author.bot:
+        return
     if read_channels.get(message.author.guild.id) == message.channel.id:
         msg = message.content
         # URLを読み上げない
@@ -79,13 +91,61 @@ async def on_message(message: Message):
             text_alt = re.sub("ｗ+", "わら", text_alt)
             text_alt = re.sub("\n", "", text_alt)
 
+            # message.guild.voice_client.is_playing():
+
             # WAVファイルを作成
-            create_WAV(text_alt)
+            # create_WAV(text_alt)
+            # with wave.open('output.wav', 'rb') as wr:
+            #     fr = wr.getframerate()
+            #     fn = wr.getnframes()
+            # print('wav再生時間:', 1.0 * fn / fr)
+            vc = message.guild.voice_client
+            global q
+            await q.put(text_alt)
+
+            # global loop
+
+
+            # if not vc.is_playing():
+                # loop.call_soon_threadsafe(await play(vc, loop))
+            # await q.join()
+            # loop.create_task(play(vc, loop))
+            # await play(vc, loop)
+            # loop.call_soon_threadsafe(await play_wav(vc))
+            # loop.run_in_executor(None, play_wav(message.guild.voice_client))
+            # loop.run_in_executor(None, await play_wav(message.guild.voice_client))
+            # loop.create_task(play_wav(message.guild.voice_client))
             # WAVファイルをDiscordにインプット
-            source = discord.FFmpegPCMAudio("output.wav")
-            # 読み上げる
-            # if yom_channel == message.channel.id:
-            message.guild.voice_client.play(source)
+            # source = discord.FFmpegPCMAudio("output.wav")
+            # # 読み上げる
+            # # if yom_channel == message.channel.id:
+            # await message.guild.voice_client.play(source)
+            # message.guild.voice_client: VoiceClient
+            # asyncio.run("output.wav")
+
+
+async def play(voice_client: VoiceClient, loop):
+    global q
+    # while True:
+    # for text in await q.get():
+    while True:
+        text = await q.get()
+        create_WAV(text)
+        source = discord.FFmpegPCMAudio("output.wav")
+        # if not voice_client.is_playing():
+        partial = functools.partial(voice_client.play, source)
+        await loop.run_in_executor(None, partial)
+
+        await q.join()
+
+        # q.task_done()
+
+        # else:
+
+        # if q.empty():
+        #     q.task_done()
+        #     break
+        # break
 
 
 @bot.event

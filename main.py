@@ -20,6 +20,36 @@ read_channels = {}
 q = asyncio.Queue()
 # loop = asyncio.new_event_loop()
 
+import asyncio
+
+class MyGuildAsyncQueueClass:
+    queues = {}
+
+    @classmethod
+    def add_to_queue(cls, guild_id, value):
+        if guild_id not in cls.queues:
+            cls.queues[guild_id] = asyncio.Queue()
+        asyncio.create_task(cls.queues[guild_id].put(value))
+
+    @classmethod
+    async def get_from_queue(cls, guild_id):
+        try:
+            queue = cls.queues[guild_id]
+        except KeyError:
+            return None
+        try:
+            return await asyncio.wait_for(queue.get(), timeout=1.0)
+        except asyncio.TimeoutError:
+            return None
+
+    @classmethod
+    def is_queue_empty(cls, guild_id):
+        try:
+            queue = cls.queues[guild_id]
+        except KeyError:
+            return True
+        return queue.empty()
+        # self.q = asyncio.Queue()
 
 @bot.event
 async def on_ready():
@@ -52,6 +82,10 @@ async def join(ctx: ApplicationContext):
     ctx.voice_client.play(source)
 
     print(read_channels)
+    # queues1 = queues()
+    # queues1.guildq[str(ctx.guild_id)] =
+    # queue_1 = queue()
+    # MyGuildAsyncQueueClass
     vc = ctx.voice_client
 
     loop = asyncio.get_event_loop()
@@ -126,17 +160,14 @@ async def on_message(message: Message):
 
 async def play(voice_client: VoiceClient, loop):
     global q
-    # while True:
-    # for text in await q.get():
     while True:
         text = await q.get()
         create_WAV(text)
         source = discord.FFmpegPCMAudio("output.wav")
-        # if not voice_client.is_playing():
-        partial = functools.partial(voice_client.play, source)
-        await loop.run_in_executor(None, partial)
-
-        await q.join()
+        voice_client.play(source)
+        while voice_client.is_playing():
+            await asyncio.sleep(0.1)
+        q.task_done()
 
         # q.task_done()
 

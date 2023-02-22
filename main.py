@@ -22,7 +22,7 @@ q = asyncio.Queue()
 
 import asyncio
 
-class MyGuildAsyncQueueClass:
+class GuildAsyncQueueClass:
     queues = {}
 
     @classmethod
@@ -50,6 +50,12 @@ class MyGuildAsyncQueueClass:
             return True
         return queue.empty()
         # self.q = asyncio.Queue()
+
+    @classmethod
+    def get_queue(cls, guild_id):
+        if guild_id not in cls.queues:
+            cls.queues[guild_id] = asyncio.Queue()
+        return cls.queues[guild_id]
 
 @bot.event
 async def on_ready():
@@ -134,9 +140,9 @@ async def on_message(message: Message):
             #     fn = wr.getnframes()
             # print('wav再生時間:', 1.0 * fn / fr)
             vc = message.guild.voice_client
-            global q
-            await q.put(text_alt)
-
+            # global q
+            # await q.put(text_alt)
+            GuildAsyncQueueClass.add_to_queue(message.guild.id, text_alt)
             # global loop
 
 
@@ -159,8 +165,10 @@ async def on_message(message: Message):
 
 
 async def play(voice_client: VoiceClient, loop):
-    global q
+    # global q
     while True:
+        # text = MyGuildAsyncQueueClass.get_from_queue(voice_client.guild.id)
+        q: asyncio.Queue = GuildAsyncQueueClass.get_queue(voice_client.guild.id)
         text = await q.get()
         create_WAV(text)
         source = discord.FFmpegPCMAudio("output.wav")
@@ -168,6 +176,8 @@ async def play(voice_client: VoiceClient, loop):
         while voice_client.is_playing():
             await asyncio.sleep(0.1)
         q.task_done()
+        # MyGuildAsyncQueueClass.get_from_queue(voice_client.guild.id)
+        # q.task_done()
 
         # q.task_done()
 

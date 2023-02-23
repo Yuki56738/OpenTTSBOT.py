@@ -1,15 +1,22 @@
-FROM python:3.11.2
+FROM ubuntu:latest
 
-WORKDIR /usr/src/app
+# Set environment variable for Discord bot token
+ENV DISCORD_TOKEN=<your-discord-bot-token>
 
-COPY requirements.txt ./
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip ffmpeg && \
+    apt install -y open-jtalk open-jtalk-mecab-naist-jdic ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the Discord bot files to the container
+COPY . /app
 
-RUN apt update
+# Install Python dependencies
+RUN pip3 install -r /app/requirements.txt
 
-RUN apt install -y open-jtalk open-jtalk-mecab-naist-jdic ffmpeg
-COPY . .
-COPY .* .
+# Set the working directory
+WORKDIR /app
 
-CMD [ "python3", "main.py" ]
+# Set the DISCORD_TOKEN environment variable before running the bot
+CMD ["bash", "-c", "export DISCORD_TOKEN=$DISCORD_TOKEN && python3 main.py"]

@@ -10,7 +10,7 @@ from discord import *
 from voice_generator import create_WAV
 
 # load_dotenv()
-load_dotenv('.envDev')
+# load_dotenv('.envDev')
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
 intents = discord.Intents.all()

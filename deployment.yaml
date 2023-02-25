@@ -16,7 +16,6 @@ spec:
     spec:
       containers:
       - name: yomiage-1
-        image: gcr.io/eden-admin-bot/yomiage-1
+        image: us-east1-docker.pkg.dev/eden-admin-bot/yuki-repo/yomiage:vx2
         env:
         - name: DISCORD_TOKEN
-          value: "MTAyMTY3NDYxODY4MTAzMjcyNA.GpNKS4.gWi-oYRXl_J0qag_OSNxuPIb5DpJkTxu_37QEo"

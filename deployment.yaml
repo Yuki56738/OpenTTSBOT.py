@@ -1,44 +1,21 @@
----
-apiVersion: "apps/v1"
-kind: "Deployment"
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: "yomiage-1"
-  namespace: "default"
+  name: yomiage-1
   labels:
-    app: "yomiage-1"
+    app: yomiage-1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "yomiage-1"
+      app: yomiage-1
   template:
     metadata:
       labels:
-        app: "yomiage-1"
+        app: yomiage-1
     spec:
       containers:
-      - name: "yomiage-sha256-1"
-        image: "us-east1-docker.pkg.dev/eden-admin-bot/yuki-repo/yomiage@sha256:f67352921b234e9a3fd064a40a712081cd560693dc4a4626554731bc3273d5e6"
----
-apiVersion: "autoscaling/v2"
-kind: "HorizontalPodAutoscaler"
-metadata:
-  name: "yomiage-1-hpa-jw0w"
-  namespace: "default"
-  labels:
-    app: "yomiage-1"
-spec:
-  scaleTargetRef:
-    kind: "Deployment"
-    name: "yomiage-1"
-    apiVersion: "apps/v1"
-  minReplicas: 1
-  maxReplicas: 1
-  metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      target:
-        type: "Utilization"
-        averageUtilization: 10
-
+      - name: yomiage-1
+        image: us-east1-docker.pkg.dev/eden-admin-bot/yuki-repo/yomiage:vx2
+        env:
+        - name: DISCORD_TOKEN

@@ -10,7 +10,7 @@ from discord import *
 from voice_generator import create_WAV
 
 # load_dotenv()
-# load_dotenv('.envDev')
+load_dotenv()
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
 intents = discord.Intents.all()
@@ -60,7 +60,6 @@ class GuildAsyncQueueClass:
 @bot.event
 async def on_ready():
     print(f"Logged in as: {bot.user}")
-
 
 @bot.slash_command(name="join", description="VCに接続.")
 async def join(ctx: ApplicationContext):
@@ -113,6 +112,41 @@ async def on_message(message: Message):
             print(x)
     if message.author.bot:
         return
+    if message.content.startswith(".join"):
+        # await join(ctx=message)
+        try:
+            await message.author.voice.channel.connect()
+        except:
+            # await ctx.respond("どこのVCにも参加していません!")
+            # return
+            pass
+        await message.reply("Connecting...")
+        # read_channels.pop(ctx.author.guild.id, ctx.channel_id)
+        read_channels[message.author.guild.id] = message.channel.id
+        with open("greeting.txt", "r") as f:
+            greeting = f.read()
+        embed_msg = discord.Embed(title="Open読み上げBOTv3.1", colour=discord.Colour.magenta(), description=greeting)
+        await message.channel.send(embed=embed_msg)
+
+        text = "読み上げです！"
+        # WAVファイルを作成
+        create_WAV(text)
+        # WAVファイルをDiscordにインプット
+        source = discord.FFmpegPCMAudio("output.wav")
+        # 読み上げる
+        # if yom_channel == message.channel.id:
+        vc: VoiceClient = message.guild.voice_client
+        vc.play(source)
+
+        print(read_channels)
+        # queues1 = queues()
+        # queues1.guildq[str(ctx.guild_id)] =
+        # queue_1 = queue()
+        # MyGuildAsyncQueueClass
+        # vc = ctx.voice_client
+
+        loop = asyncio.get_event_loop()
+        loop.create_task(play(vc, loop))
     if read_channels.get(message.author.guild.id) == message.channel.id:
         msg = message.content
         # URLを読み上げない

@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 # Set environment variable for Discord bot token
-ENV DISCORD_TOKEN="OTUzNTkwNzgxNzAzMjU0MDI2.G9dD0L.gdhxtV2yuW49eKkrzku8yhRJSERRn13_GliNn8"
+ENV DISCORD_TOKEN=$DISCORD_TOKEN
 
 # Install dependencies
 RUN apt-get update && \

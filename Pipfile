@@ -16,3 +16,5 @@ python_full_version = "3.11.2"
 
 [scripts]
 start = "python main.py"
+installdeps = "sudo apt-get install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001 ffmpeg"
+macinstalldeps = "sudo port install open_jtalk"

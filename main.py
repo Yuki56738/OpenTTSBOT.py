@@ -2,6 +2,7 @@ import functools
 import re
 import sys
 import os
+import traceback
 import wave
 
 from dotenv import load_dotenv
@@ -68,7 +69,7 @@ async def join(ctx: ApplicationContext):
     except:
         # await ctx.respond("どこのVCにも参加していません!")
         # return
-        pass
+        traceback.format_exc()
     await ctx.respond("Connecting...")
     # read_channels.pop(ctx.author.guild.id, ctx.channel_id)
     read_channels[ctx.author.guild.id] = ctx.channel_id
@@ -79,22 +80,24 @@ async def join(ctx: ApplicationContext):
 
     text = "読み上げです！"
     # WAVファイルを作成
-    create_WAV(text)
+    # create_WAV(text)
     # WAVファイルをDiscordにインプット
-    source = discord.FFmpegPCMAudio("output.wav")
+    # source = discord.FFmpegPCMAudio("output.wav")
     # 読み上げる
     # if yom_channel == message.channel.id:
-    ctx.voice_client.play(source)
+    # ctx.voice_client.play(source)
 
     print(read_channels)
     # queues1 = queues()
     # queues1.guildq[str(ctx.guild_id)] =
     # queue_1 = queue()
     # MyGuildAsyncQueueClass
-    vc = ctx.voice_client
-
+    # vc = ctx.voice_client
+    # GuildAsyncQueueClass.add_to_queue(ctx.guild_id, text)
     loop = asyncio.get_event_loop()
-    loop.create_task(play(vc, loop))
+    loop.create_task(play(vc=ctx.author.voice))
+    # loop.create_task(play(vc=vc))
+    # await play(vc=ctx.author.voice)
 
 
 @bot.slash_command(name="leave", description="VCから切断.")
@@ -136,7 +139,7 @@ async def on_message(message: Message):
         # 読み上げる
         # if yom_channel == message.channel.id:
         vc: VoiceClient = message.guild.voice_client
-        vc.play(source)
+        # vc.play(source)
 
         print(read_channels)
         # queues1 = queues()
@@ -145,8 +148,8 @@ async def on_message(message: Message):
         # MyGuildAsyncQueueClass
         # vc = ctx.voice_client
 
-        # loop = asyncio.get_event_loop()
-        # loop.create_task(play(vc, loop))
+        loop = asyncio.get_event_loop()
+        loop.create_task(play(vc, loop))
     if read_channels.get(message.author.guild.id) == message.channel.id:
         msg = message.content
         # URLを読み上げない
@@ -198,18 +201,21 @@ async def on_message(message: Message):
             # asyncio.run("output.wav")
 
 
-async def play(voice_client: VoiceClient, loop):
+async def play(vc):
     # global q
     while True:
         # text = MyGuildAsyncQueueClass.get_from_queue(voice_client.guild.id)
-        q: asyncio.Queue = GuildAsyncQueueClass.get_queue(voice_client.guild.id)
+        q: asyncio.Queue = GuildAsyncQueueClass.get_queue(vc)
         text = await q.get()
         create_WAV(text)
         source = discord.FFmpegPCMAudio("output.wav")
-        voice_client.play(source)
-        while voice_client.is_playing():
+        vc.play(source)
+        while vc.is_playing():
             await asyncio.sleep(0.1)
         q.task_done()
+
+        # if q.task_done():
+            # break
         # MyGuildAsyncQueueClass.get_from_queue(voice_client.guild.id)
         # q.task_done()
 

@@ -1,7 +1,7 @@
 import re
-import sys
+# import sys
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import discord
 from discord import *
 from voice_generator import create_WAV

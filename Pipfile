@@ -7,6 +7,8 @@ name = "pypi"
 py-cord = {extras = ["voice"], version = "*"}
 ffmpeg = "*"
 typing-extensions = "*"
+requests = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

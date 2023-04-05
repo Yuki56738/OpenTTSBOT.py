@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-py-cord = {extras = ["voice"], version = "*"}
 ffmpeg = "*"
 typing-extensions = "*"
 requests = "*"
 python-dotenv = "*"
+py-cord = {extras = ["voice"], version = "*"}
 
 [dev-packages]
 

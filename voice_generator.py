@@ -23,6 +23,7 @@ def create_WAV(inputText):
     x = '/var/lib/mecab/dic/open-jtalk/naist-jdic'
     if not os.path.exists(x):
         x = '/opt/local/lib/open_jtalk/dic'
+    print(f"Using dict from: {x}")
     # x = '/opt/homebrew/lib/mecab/dic/ipadic'
     # x = '/usr/local/lib/mecab/dic/ipadic'
     # x = '/usr/local/lib/mecab/dic/ipadic'

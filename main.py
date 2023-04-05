@@ -145,8 +145,8 @@ async def on_message(message: Message):
         # MyGuildAsyncQueueClass
         # vc = ctx.voice_client
 
-        loop = asyncio.get_event_loop()
-        loop.create_task(play(vc, loop))
+        # loop = asyncio.get_event_loop()
+        # loop.create_task(play(vc, loop))
     if read_channels.get(message.author.guild.id) == message.channel.id:
         msg = message.content
         # URLを読み上げない

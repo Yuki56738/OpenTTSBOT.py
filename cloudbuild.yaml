@@ -1,5 +1,0 @@
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'us-east1-docker.pkg.dev/eden-admin-bot/yuki-repo/yomiage:vx2','--platform=linux/amd64', '.' ]
-images:
-- 'us-east1-docker.pkg.dev/eden-admin-bot/yuki-repo/yomiage'

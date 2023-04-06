@@ -7,4 +7,4 @@ Open source.
 ※たまにメンテナンスで落ちます。その際は再度 /joinにて接続をお願い致します。
 ソースコード及び不具合等は以下まで:
 https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord
-  このBOTは、VOICEVOXを使用しています。
+  VOICEVOX:ずんだもん

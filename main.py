@@ -1,12 +1,12 @@
 import re
 # import sys
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import discord
 from discord import *
 from voice_generator import create_WAV
 
-load_dotenv()
+#load_dotenv()
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
 intents = discord.Intents.all()

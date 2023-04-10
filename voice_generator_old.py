@@ -24,9 +24,6 @@ def create_WAV(inputText):
     if not os.path.exists(x):
         x = '/opt/local/lib/open_jtalk/dic'
     print(f"Using dict from: {x}")
-    # x = '/opt/homebrew/lib/mecab/dic/ipadic'
-    # x = '/usr/local/lib/mecab/dic/ipadic'
-    # x = '/usr/local/lib/mecab/dic/ipadic'
 
     # ボイスファイルのPath
     # m = '/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice'

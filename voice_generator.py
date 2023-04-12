@@ -1,8 +1,8 @@
 import os
 import requests
-#from dotenv import load_dotenvf
+from dotenv import load_dotenv
 
-#load_dotenv()
+load_dotenv()
 to_post_url = os.environ.get("VVOX_URL")
 
 

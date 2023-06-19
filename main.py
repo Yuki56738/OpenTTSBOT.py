@@ -18,7 +18,9 @@ read_channels = {}
 @bot.event
 async def on_ready():
     print(f"Logged in as: {bot.user}")
-
+    for x in bot.guilds:
+        print(x.name)
+    print('---------------------------')
 
 @bot.slash_command(name="join", description="VCに接続.")
 async def join(ctx: ApplicationContext):

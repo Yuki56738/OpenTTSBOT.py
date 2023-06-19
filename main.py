@@ -40,7 +40,7 @@ async def join(ctx: ApplicationContext):
 
     text = "読み上げです！"
     # WAVファイルを作成
-    create_WAV(text)
+    await create_WAV(text)
     # WAVファイルをDiscordにインプット
     source = discord.FFmpegPCMAudio("output.wav")
     # 読み上げる
@@ -82,7 +82,7 @@ async def on_message(message: Message):
             text_alt = re.sub("\n", "", text_alt)
 
             # WAVファイルを作成
-            create_WAV(text_alt)
+            await create_WAV(text_alt)
             # WAVファイルをDiscordにインプット
             source = discord.FFmpegPCMAudio("output.wav")
             # 読み上げる

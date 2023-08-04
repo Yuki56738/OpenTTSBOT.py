@@ -6,7 +6,7 @@ load_dotenv()
 to_post_url = os.environ.get("VVOX_URL")
 
 
-def create_WAV(text: str):
+async def create_WAV(text: str):
     global to_post_url
     params = {
         'speaker': '1',

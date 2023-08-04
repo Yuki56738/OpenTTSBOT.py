@@ -6,6 +6,8 @@ import discord
 from discord import *
 from voice_generator import create_WAV
 
+# https://discord.com/api/oauth2/authorize?client_id=953590781703254026&permissions=4298185728&scope=bot%20applications.commands
+
 load_dotenv()
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
@@ -18,7 +20,9 @@ read_channels = {}
 @bot.event
 async def on_ready():
     print(f"Logged in as: {bot.user}")
-
+    for x in bot.guilds:
+        print(x.name)
+    print('---------------------------')
 
 @bot.slash_command(name="join", description="VCに接続.")
 async def join(ctx: ApplicationContext):
@@ -38,7 +42,7 @@ async def join(ctx: ApplicationContext):
 
     text = "読み上げです！"
     # WAVファイルを作成
-    create_WAV(text)
+    await create_WAV(text)
     # WAVファイルをDiscordにインプット
     source = discord.FFmpegPCMAudio("output.wav")
     # 読み上げる
@@ -80,7 +84,7 @@ async def on_message(message: Message):
             text_alt = re.sub("\n", "", text_alt)
 
             # WAVファイルを作成
-            create_WAV(text_alt)
+            await create_WAV(text_alt)
             # WAVファイルをDiscordにインプット
             source = discord.FFmpegPCMAudio("output.wav")
             # 読み上げる

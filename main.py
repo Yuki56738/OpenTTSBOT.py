@@ -6,6 +6,8 @@ import discord
 from discord import *
 from voice_generator import create_WAV
 
+# https://discord.com/api/oauth2/authorize?client_id=953590781703254026&permissions=4298185728&scope=bot%20applications.commands
+
 load_dotenv()
 TOKEN = os.environ.get("DISCORD_TOKEN")
 

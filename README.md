@@ -9,11 +9,14 @@ yomi@risaton.net
 
 ※Ubuntu Linuxのみで動作検証しています。
 
-ダウンロード:  
 ```shell
-git clone https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord.git
+git clone https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord.git  
+  
+docker build -t tts .  
+docker run --rm -it tts
 ```
-
+  
+従来の方法:  
 1. 依存関係のインストール
 ```
 sudo apt install ffmpeg pipenv  

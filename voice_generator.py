@@ -12,10 +12,11 @@ async def create_WAV(text: str):
         'speaker': '1',
         'text': text,
     }
+    print('sending request to the voicevox server...')
 
     response = requests.post(f'http://{to_post_url}/audio_query', params=params)
 
-    print(response.status_code)
+    print(f'response status: {response.status_code}')
 
     headers = {
         'Content-Type': 'application/json',
@@ -26,7 +27,11 @@ async def create_WAV(text: str):
     }
     data = response.content
 
+    print('sending request to the voicevox server...')
+
     response1 = requests.post(f'http://{to_post_url}/synthesis', params=params, headers=headers, data=data)
+
+    print(f'response status: {response1.status_code}')
 
     with open('output.wav', 'wb') as file:
         file.write(response1.content)

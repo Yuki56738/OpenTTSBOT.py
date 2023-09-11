@@ -6,7 +6,7 @@ ENV DISCORD_TOKEN=$DISCORD_TOKEN
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y python3 python3-pip ffmpeg && \
-    apt install -y open-jtalk open-jtalk-mecab-naist-jdic ffmpeg && \
+    apt install -y ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the Discord bot files to the container

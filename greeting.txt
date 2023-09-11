@@ -2,9 +2,7 @@ Created by Yuki.
 Open source.
 /joinで接続。
 /leaveで切断。
-***話している最中に、別の文を書くと、読み上げが中断される問題を解決！***
-(キュー)
-※たまにメンテナンスで落ちます。その際は再度 /joinにて接続をお願い致します。
+※たまにメンテナンスで落ちます。その際は、数分後に /joinにて接続をお願い致します。
 ソースコード及び不具合等は以下まで:
-https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord
+https://github.com/Yuki56738/OpenTTSBOT.py
   VOICEVOX:ずんだもん

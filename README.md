@@ -16,7 +16,9 @@ git clone https://github.com/Yuki56738/Yuki-s-yomiage-BOT-v2.discord.git
 
 1. 依存関係のインストール
 ```
-sudo apt install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001 ffmpeg pipenv  
+sudo apt install ffmpeg pipenv  
+#(Maybe required)  
+pipenv --python 3  
 pipenv install
 ```
 2. トークンを記述

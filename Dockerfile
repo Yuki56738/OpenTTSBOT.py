@@ -12,11 +12,16 @@ RUN apt-get update && \
 # Copy the Discord bot files to the container
 COPY . /app
 
-# Install Python dependencies
-RUN pip3 install -r /app/requirements.txt
+WORKDIR /app
 
+RUN pip3 install pipenv
+RUN pipenv --python 3
+#RUN pipenv requirements >>requirements.txt
+# Install Python dependencies
+#RUN pip3 install -r /app/requirements.txt
+RUN pipenv install
 # Set the working directory
 WORKDIR /app
 
 # Set the DISCORD_TOKEN environment variable before running the bot
-CMD ["bash", "-c", "export DISCORD_TOKEN=$DISCORD_TOKEN && python3 main.py"]
+CMD ["bash", "-c", "export DISCORD_TOKEN=$DISCORD_TOKEN && pipenv run python3 main.py"]

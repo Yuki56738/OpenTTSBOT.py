@@ -11,15 +11,18 @@ RUN apt-get update && \
 
 # Copy the Discord bot files to the container
 COPY . /app
-
+# Change working directory to /app
 WORKDIR /app
 
+# Install pipenv via pip3
 RUN pip3 install pipenv
+
+# Set Python version to current Linux'
 RUN pipenv --python 3
-#RUN pipenv requirements >>requirements.txt
+
 # Install Python dependencies
-#RUN pip3 install -r /app/requirements.txt
 RUN pipenv install
+
 # Set the working directory
 WORKDIR /app
 

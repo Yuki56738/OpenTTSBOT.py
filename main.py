@@ -24,6 +24,7 @@ async def on_ready():
         print(x.name)
     print('---------------------------')
 
+
 @bot.slash_command(name="join", description="VCに接続.")
 async def join(ctx: ApplicationContext):
     try:
@@ -108,11 +109,6 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
             if len(before.channel.members) == 1:
                 await member.guild.voice_client.disconnect()
                 read_channels.pop(member.guild.id)
-    # try:
-    #     member.voice.channel.members
-    # except:
-    #     await member.guild.voice_client.disconnect()
-    #     read_channels.pop(member.guild.id)
 
 
 bot.run(TOKEN)

@@ -5,4 +5,4 @@ Open source.
 ※たまにメンテナンスで落ちます。その際は、数分後に /joinにて接続をお願い致します。
 ソースコード及び不具合等は以下まで:
 https://github.com/Yuki56738/OpenTTSBOT.py
-  VOICEVOX:ずんだもん
+  VOICEVOX:冥鳴ひまり

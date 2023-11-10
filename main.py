@@ -72,6 +72,10 @@ async def on_message(message: Message):
         # URLを読み上げない
         if message.content.startswith("http://") or message.content.startswith("https://"):
             msg = "URL省略"
+        if message.attachments:
+            for attachment in message.attachments:
+                if attachment.content_type.startswith('image'):
+                    msg = '画像が送信されました'
         # 50文字までしか読み上げない
         if len(message.content) <= 50:
             # メンションを読み上げない

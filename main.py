@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import discord
 from discord import *
 from voice_generator import create_WAV
+import change_volume
 
 # https://discord.com/api/oauth2/authorize?client_id=953590781703254026&permissions=4298185728&scope=bot%20applications.commands
 
@@ -71,6 +72,10 @@ async def on_message(message: Message):
         # URLを読み上げない
         if message.content.startswith("http://") or message.content.startswith("https://"):
             msg = "URL省略"
+        if message.attachments:
+            for attachment in message.attachments:
+                if attachment.content_type.startswith('image'):
+                    msg = '画像が送信されました'
         # 50文字までしか読み上げない
         if len(message.content) <= 50:
             # メンションを読み上げない
@@ -86,6 +91,7 @@ async def on_message(message: Message):
 
             # WAVファイルを作成
             await create_WAV(text_alt)
+            await change_volume.change_volume(5, 'output.wav')
             # WAVファイルをDiscordにインプット
             source = discord.FFmpegPCMAudio("output.wav")
             # 読み上げる

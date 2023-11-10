@@ -1,3 +1,4 @@
+import asyncio
 import os
 import requests
 from dotenv import load_dotenv
@@ -33,4 +34,4 @@ async def create_WAV(text: str):
 
 
 if __name__ == "__main__":
-    create_WAV("こんにちは、世界に！")
+    asyncio.run(create_WAV("こんにちは、世界に！"))

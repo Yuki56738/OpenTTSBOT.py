@@ -9,6 +9,7 @@ typing-extensions = "*"
 requests = "*"
 py-cord = {extras = ["voice"], version = "*"}
 python-dotenv = "*"
+pydub = "*"
 
 [dev-packages]
 

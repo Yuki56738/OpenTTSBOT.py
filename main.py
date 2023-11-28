@@ -1,3 +1,4 @@
+import datetime
 import re
 # import sys
 import os
@@ -6,6 +7,7 @@ import discord
 from discord import *
 from voice_generator import create_WAV
 import change_volume
+from discord.ext import tasks, commands
 
 # https://discord.com/api/oauth2/authorize?client_id=953590781703254026&permissions=4298185728&scope=bot%20applications.commands
 
@@ -116,5 +118,20 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
                 await member.guild.voice_client.disconnect()
                 read_channels.pop(member.guild.id)
 
-
+@tasks.loop(seconds=7200)
+async def loop():
+    for x in read_channels:
+        guild1 = await bot.fetch_guild(x)
+        text = datetime.datetime.now().hour
+        text2 = datetime.datetime.now().minute
+        text3 = str(text)+ 'じ' + str(text2) + 'ふん'
+        await create_WAV(text3)
+        await change_volume.change_volume(5, 'output.wav')
+        # WAVファイルをDiscordにインプット
+        source = discord.FFmpegPCMAudio("output.wav")
+        # 読み上げる
+        # if yom_channel == message.channel.id:
+        guild1.voice_client.play(source)
+        print(guild1)
+loop.start()
 bot.run(TOKEN)

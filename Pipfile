@@ -10,6 +10,7 @@ requests = "*"
 py-cord = {extras = ["voice"], version = "*"}
 python-dotenv = "*"
 pydub = "*"
+audioop-lts = "*"
 
 [dev-packages]
 
